@@ -1,0 +1,98 @@
+html {
+    background:rgb(250, 250, 250);
+}
+div.main {
+    margin: .5em 1em;
+}
+div.presurvey {
+
+}
+div.preference {
+    
+}
+div.reading {
+    
+}
+div.comprehension {
+    
+}
+div.postsurvey {
+    
+}
+
+button.toggle {
+    cursor: pointer;
+    margin-bottom: 1em;
+    width: 100%;
+}
+button.choice {
+    cursor: pointer;
+    margin-bottom: 1em;
+    width: 100%;
+}
+button.instructions {
+    cursor: pointer;
+    width: 100%;
+}
+svg.icon-spacer {
+    margin-right:.25em;
+}
+p.prompt {
+    font-size: 24px;
+    font-style: oblique;
+    font-weight: bold;
+    margin-top: 1em;
+}
+p.progress_title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 1em;
+}
+p.reading {
+    font-size: 16px;
+    max-width: 100%;
+    min-height: 420px;
+    padding: 2em;
+    margin: 1em 0em;
+    border: 1px solid #dbdbdb;
+    background: #fff;
+}
+p.radio_question {
+    font-weight: bold;
+    margin-top: 1em;
+}
+input.radio_btn {
+    margin: 0em 1em;
+    cursor: pointer;
+    transform: scale(1.5);
+}
+
+iframe.survey_iframe {
+    max-width: 520px;
+    max-height: 100%;
+    height: 680px;
+    border-top: 1px solid #dbdbdb;
+    border-bottom: 1px solid #dbdbdb;
+    overflow: scroll;
+}
+freebirdFormviewerViewCenteredContent {
+    max-width: 100%;
+}
+
+@media only screen and (min-width: 600px) {
+    /* For tablets: */
+    p.reading {max-width: 480px;}
+    button.toggle {max-width: 480px;}
+    button.choice {max-width: 480px;}
+    button.instructions {max-width: 480px;}
+    progress {max-width: 480px;}
+}
+
+@media only screen and (min-width: 768px) {
+    /* For desktop: */
+    p.reading {max-width: 480px;}
+    button.toggle {max-width: 480px;}
+    button.choice {max-width: 480px;}
+    button.instructions {max-width: 480px;}
+    progress {max-width: 480px;}
+}

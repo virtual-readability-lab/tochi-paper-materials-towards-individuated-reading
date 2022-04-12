@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+<html lang="html">
+    <head>
+        <meta charset="utf-8">
+        <!--<link rel="shortcut icon" href="favicon.ico">-->
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="theme-color" content="#000000">
+
+        <!-- Import Roboto, Lato, Open Sans, Monsterrat, Noto Sans  -->
+        <link href="https://fonts.googleapis.com/css?family=Lato|Montserrat|Noto+Sans|Open+Sans|Roboto&display=swap" rel="stylesheet">
+
+        <!-- Source Sans Pro -->
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+
+        <!-- Adobe Fonts: Avant Garde -->
+        <link rel="stylesheet" href="https://use.typekit.net/oly8jmk.css">
+
+        <!-- Other CSS -->
+        <link rel="stylesheet" href="style/bulma-0.7.5/css/bulma.min.css"></link>
+        <link rel="stylesheet" href="style/readability_normalized.css"></link>
+        <link rel="stylesheet" href="style/font_choices_study4.css"></link>
+        
+        <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/ua-parser-js@0.7.20/src/ua-parser.min.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    </head>
+
+    <body onmousemove="forceScreenSize()">
+        <div class="main">
+            <!-- PRE SURVEY -->
+            <div id="pre_survey" class="pre_survey" style="display: none; height:100%">
+                <p id="prompt" class="prompt">Readability</p>
+                <p style="width: 480px; margin: 1em 1em;">
+                 First enter the Unique ID below in the first text box in the survey. Then, please fill out the survey to the best of your ability. After completion you will be begin the main study.
+                </p>
+                <p id="userid_pre" class="userid" style='display:none'></p>
+                <hr style="width: 480px; margin: 1em;">
+                <div>
+
+                    <iframe class="survey_iframe pre_survey_iframe" scrolling="yes" width="600" height="100%" frameborder="0" marginheight="0" marginwidth="0" src="https://docs.google.com/forms/d/e/1FAIpQLScuCDIcui6ogL3XBuz8bZgF3KD9f3qF_RiOHkWwY-CvZtLWug/viewform?embedded=true">Loading…</iframe>
+
+                </div>
+                <p style="width: 480px; margin-bottom: .5em">Please enter in the <b>secret animal code</b> generated after completing and submitting the pre-survey above to proceed.</p>
+                <input id="pre_survey_code" class="input" type="text" placeholder="Enter code here" style="width: 480px; margin-bottom: 1em" oninput="pre_survey_code_change(this)">
+                <br>
+                <button id="pre_survey_proceed" class="choice row button is-large" disabled=true onclick="new_study_step()"><span class='icon'></span><i class="far fa-thumbs-up icon-spacer"></i>Proceed to next step...</span></button>
+            </div>
+            <!-- INSTRUCTIONS OVERALL -->
+            <div id="instructions_overall" style="display: none; height:100%">
+                <p id="prompt" class="prompt">Readability - Instructions</p>
+                <p class="reading">
+                    The main study consists of several parts. The 1st part is a warm-up. The 2nd is a font preference test. And then you will complete 10 short rounds of readings and comprehension questions. 
+                    <br><br>
+                    During the <b>font preference test</b>, you will be asked to toggle between two fonts and then choose your preferred font multiple times.
+                    <br><br>
+                    <i>During the reading sections, please read as quickly as you can, without reading out-loud or re-reading. However, be prepared to answer comprehension questions about the reading.</i>
+                    <br><br>
+                    If you want to take breaks, we ask that you do so during the instruction screens, not during the reading or font preference rounds.
+                    <br><br>
+                    <b>Please do not refresh the browser, it will reset the study.</b>
+                </p>
+                <button id="proceed_instructions_overall" class="choice row button is-large" onclick="new_study_step()"><span class='icon'></span><i class="far fa-arrow-right icon-spacer"></i>Proceed to the main study...</span></button>
+            </div>
+            <!-- INSTRUCTIONS MODAL -->
+            <div id="modal" class="modal">
+                <div class="modal-background"></div>
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                    <p class="modal-card-title">Readability - Instructions</p>
+                    <button class="delete" aria-label="close" onclick="closeHelpModal()"></button>
+                    </header>
+                    <section id="modal-card-body" class="modal-card-body">
+                        <!-- Content ... -->
+                        
+                    </section>
+                    <footer class="modal-card-foot">
+                    <button class="button" onclick="closeHelpModal()">Return to the study</button>
+                    </footer>
+                </div>
+            </div>
+            <!-- INSTRUCTIONS PREFERENCE -->
+            <div id="instructions_preference" class="instructions_preference" style="display: none">
+                <p id="prompt" class="prompt">Instructions - Font Toggle</p>
+                <p class="reading">
+                    In the next section, you will be asked to choose what font would be easiest to read in from several pairings by toggling between choices and then selecting your preference. 
+                    <br><br>
+                    <b>You do not need to read the text passages during the font preference test.</b>
+                    <br><br>
+                    If you need to take a break please do so now.
+                    <br><br>
+                    Once you are ready, please click the button below.
+                </p>
+                <button id="proceed_instructions_preference" class="choice row button is-large" onclick="new_study_step()"><span class='icon'></span><i class="far fa-arrow-right icon-spacer"></i>Proceed to next step...</span></button>
+            </div>
+            <!-- PREFERENCE --> 
+            <div id="preference" class="preference" style="display: none">
+                <p id="prompt" class="prompt">What font is easier for you to read in?</p>
+                <p id='reading' class="reading"></p>
+
+                <button id="toggle" class="toggle row button is-large" onclick="toggleClick()"><span class="icon"><i class="fas fa-sync-alt icon-spacer"></i> Toggle Font</span></button>
+                <br>
+                <button id="choice" class="choice row button is-large" onclick="choiceClick()"><span class='icon'></span><i class="far fa-thumbs-up icon-spacer"></i>Please toggle the font first</span></button>
+                <!--
+                <br>
+                <button id="modal_preference" class="instructions row button is is-large" onclick="openHelpModal()"><i class="far fa-question-circle icon-spacer"></i> Open Instructions</span></button>
+                -->
+            </div>
+            <!-- PREFERRED FONT --> 
+            <div id="preferred_font" class="preference" style="display: none">
+                <p id="prompt_preferred_font" class="prompt">Your preferred font is...</p>
+                <p id='reading_preferred_font' class="reading"></p>
+                <p id='champ_preference'></p>
+                <p id='wpm_preference'></p> 
+                <button id="proceed_preferred_font" class="choice row button is-large" onclick="new_study_step()"><span class='icon'></span><i class="far fa-arrow-right icon-spacer"></i>Proceed to next step...</span></button>
+            </div>
+            <!-- INSTRUCTIONS READING -->
+            <div id="instructions_reading" class="instructions_reading" style="display: none">
+                <p id="prompt" class="prompt">Instructions - Reading</p>
+                <p id='reading' class="reading">
+                    <span id="reading_pref_test_done" style="display:none"><b>Thank you for completing the font preference test.</b> Next, you will complete 10 rounds of readings and comprehension questions.<br></span>
+                    In the next section, please try to read the 2 passages at your normal speed as quickly as possible, but keep in mind you will answer questions after reading.
+                    <br><br>
+                    <b>Please do not re-read sections or read aloud.</b>
+                    <br><br>
+                    If you need to take a break please do so now.
+                    <br><br>
+                    Once you are ready, please click the button below.
+                </p>
+                <button id="proceed_instructions_reading" class="choice row button is-large" onclick="new_study_step()"><span class='icon'><i class="fas fa-book-reader icon-spacer"></i>Proceed to reading section...</span></button>
+            </div>
+            <!-- EFFECTIVENESS - SPEED -->
+            <div id='speed' class="speed" style="display: none">
+                <p id="prompt" class="prompt">Readability</p>
+                <p id='reading_speed' class='reading'></p>
+                <button id="proceed_reading" class="choice row button is-large" onclick="new_speed_test()">
+                    <!--<span class='icon'><i class="far fa-book-reader icon-spacer"></i>Proceed to next section...</span>-->
+                    <span id="speed_btn_prompt" class="icon">
+                        
+                    </span>
+                </button>
+                <!--
+                <br>
+                <button id="modal_preference" class="instructions row button is is-large" onclick="openHelpModal()"><i class="far fa-question-circle icon-spacer"></i> Open Instructions</span></button>
+                -->
+            </div>
+            <!-- EFFECTIVENESS - COMPREHENSION -->
+            <div id='comprehension' class="comprehension" style="display: none">
+                <p id="prompt" class="prompt">Readability - Comprehension Questions</p>
+
+                <p id="q1_question" class="radio_question"></p>
+                <input id="q1_1" type="radio" class="radio_btn" name="q1" value="" onchange="radioSel('q1', 'proceed_comprehension')"><span id="q1_1_text"></span><br>
+                <input id="q1_2" type="radio" class="radio_btn" name="q1" value="" onchange="radioSel('q1', 'proceed_comprehension')"><span id="q1_2_text"></span><br>
+                <input id="q1_3" type="radio" class="radio_btn" name="q1" value="" onchange="radioSel('q1', 'proceed_comprehension')"><span id="q1_3_text"></span><br>
+                
+                <p id="q2_question" class="radio_question"></p>
+                <input id="q2_1" type="radio" class="radio_btn" name="q2" value="" onchange="radioSel('q2', 'proceed_comprehension')"><span id="q2_1_text"></span><br>
+                <input id="q2_2" type="radio" class="radio_btn" name="q2" value="" onchange="radioSel('q2', 'proceed_comprehension')"><span id="q2_2_text"></span><br>
+                <input id="q2_3" type="radio" class="radio_btn" name="q2" value="" onchange="radioSel('q2', 'proceed_comprehension')"><span id="q2_3_text"></span><br> 
+                
+                <!--
+                <p id="q3_question" class="radio_question"></p>
+                <input id="q3_1" type="radio" class="radio_btn" name="q3" value="" onchange="radioSel('q3', 'proceed_comprehension')"><span id="q3_1_text"></span><br>
+                <input id="q3_2" type="radio" class="radio_btn" name="q3" value="" onchange="radioSel('q3', 'proceed_comprehension')"><span id="q3_2_text"></span><br>
+                <input id="q3_3" type="radio" class="radio_btn" name="q3" value="" onchange="radioSel('q3', 'proceed_comprehension')"><span id="q3_3_text"></span><br> 
+                -->
+
+                <hr style="width:480px">
+                <button id="proceed_comprehension" class="choice row button is-large" onclick="proceed_comprehension_next()" disabled><span class='icon'></span><i class="far fa-arrow-right icon-spacer"></i>Please answer the questions above</span></button>
+            </div>
+            <!-- MINI-QUESTIONS -->
+            <div id='mini_questions' class="mini_questions" style="display: none">
+                <p id="prompt" class="prompt">Readability - Questions</p>
+
+                <p id="familiarity_questions" class="radio_question">How familiar were you with the topic from the previous reading passage?</p>
+                <input id="f1" type="radio" class="radio_btn" name="familiarity_questions" value="not_at_all" onchange="radioSel('familiarity_questions', 'proceed_mini_questions')"><span id="f1_text">Not at all</span><br>
+                <input id="f2" type="radio" class="radio_btn" name="familiarity_questions" value="slightly"   onchange="radioSel('familiarity_questions', 'proceed_mini_questions')"><span id="f2_text">Slightly</span><br>
+                <input id="f3" type="radio" class="radio_btn" name="familiarity_questions" value="moderately"  onchange="radioSel('familiarity_questions', 'proceed_mini_questions')"><span id="f3_text">Moderately</span><br>
+                <input id="f4" type="radio" class="radio_btn" name="familiarity_questions" value="very"       onchange="radioSel('familiarity_questions', 'proceed_mini_questions')"><span id="f4_text">Very</span><br>
+                <input id="f5" type="radio" class="radio_btn" name="familiarity_questions" value="extremely"  onchange="radioSel('familiarity_questions', 'proceed_mini_questions')"><span id="f5_text">Extremely</span><br>
+
+                <p id="interest_questions" class="radio_question">How interesting was the previous reading passage?</p>
+                <input id="i1" type="radio" class="radio_btn" name="interest_questions" value="not_at_all" onchange="radioSel('interest_questions', 'proceed_mini_questions')"><span id="i1_text">Not at all</span><br>
+                <input id="i2" type="radio" class="radio_btn" name="interest_questions" value="slightly"   onchange="radioSel('interest_questions', 'proceed_mini_questions')"><span id="i2_text">Slightly</span><br>
+                <input id="i3" type="radio" class="radio_btn" name="interest_questions" value="moderately" onchange="radioSel('interest_questions', 'proceed_mini_questions')"><span id="i3_text">Moderately</span><br>
+                <input id="i4" type="radio" class="radio_btn" name="interest_questions" value="very"       onchange="radioSel('interest_questions', 'proceed_mini_questions')"><span id="i4_text">Very</span><br>
+                <input id="i5" type="radio" class="radio_btn" name="interest_questions" value="extremely"  onchange="radioSel('interest_questions', 'proceed_mini_questions')"><span id="i5_text">Extremely</span><br>
+                
+                <!--
+                <p id="reading_questions" class="radio_question">Did you find yourself re-reading any pieces of text more than once?</p>
+                <input id="r1" type="radio" class="radio_btn" name="reading_questions" value="no"  onchange="radioSel('reading_questions', 'proceed_mini_questions')"><span id="r1_text">No. I read all the words exactly once.</span><br>
+                <input id="r2" type="radio" class="radio_btn" name="reading_questions" value="yes" onchange="radioSel('reading_questions', 'proceed_mini_questions')"><span id="r2_text">Yes, I re-read portions of the text.</span><br>
+                -->
+
+                <hr style="width:480px">
+                <button id="proceed_mini_questions" class="choice row button is-large" onclick="proceed_mini_questions_next()" disabled><span class='icon'></span><i class="far fa-arrow-right icon-spacer"></i>Please answer the questions above</span></button>
+            </div>
+            <div id='font_familiarity' class="font_familiarity" style="display: none"></div>
+            </div>
+            <!-- POST-SURVEY -->
+            <div id='post_survey' class="post_survey" style="display: none">
+                <div id='post_survey_1' class="post_survey" style="display: block; margin: 1em">
+                    <p id="prompt" class="prompt">Readability - Post-Survey</p>
+                    <p id="prompt_preferred_font_post_survey" style="font-size: 1.5em;">Your preferred font is...</p>
+                    <p style="width: 480px; margin: 1em 1em;">
+                        First enter the Unique ID below in the first text box in the survey.
+                    </p>
+                    <p id="userid_post" class="userid" style='display:none'></p>
+                    <hr style="width: 480px; margin: 1em;">
+                    <div>
+                        
+                        <iframe class="survey_iframe post_survey_iframe" scrolling="yes" width="600" height="100%" src="https://docs.google.com/forms/d/e/1FAIpQLSeaVnnREau3EDyNZ6HBw_142kbprbrTetXTmnSrBthbaU6xQw/viewform?embedded=true">Loading…</iframe>
+
+                    </div>    
+                    <p id="userid_post" class="userid" style='display:none'></p>
+                    <hr style="width: 480px; margin: 1em;">
+                    <p style="width: 480px; margin-bottom: .5em">Please enter in the <b>code</b> generated after completing and submitting the post-survey above to complete the study.</p>
+                    <input id="post_survey_code" class="input" type="text" placeholder="Enter code here" style="width: 480px; margin-bottom: 1em" oninput="post_survey_code_change(this)">
+                    <br><button id="post_survey_proceed" class="choice row button is-large" disabled=true onclick="complete_post_survey()"><span class='icon'></span><i class="far fa-thumbs-up icon-spacer"></i>Submit Post-Survey</span></button>
+                </div>
+                <div id='post_survey_2' style="display: none;">
+                    <p class="prompt" style="margin-left: 1em;">
+                        Thank you for completing the study!
+                    </p>
+                    <div id='mturk_msg' style="display: none;">
+                        <p class="prompt" style="margin-left: 1em;">Please copy and paste the <b>Mechanical Turk Survey Code</b> below to get credit at Amazon Mechanical Turk:</p>
+                        <p id="userid_mturk" class="userid"></p>
+                    </div>
+                </div>
+            </div>
+            <!-- PROGRESS -->
+            <div id='progress_div' style="margin-left: 1em; margin-bottom: 1em;">
+                <p id="progress_title" class="progress_title">Progress</p>
+                <progress id="progress" class="progress" value="0" max="110"></progress>
+            </div>
+        </div>
+    </body>
+
+<script>
+    //VARS
+    /////// MAIN STUDY STEPS
+    let step_i = 0 // 0 start, 16 main study, 107 post-survey
+    let step_label, step_part, step_block, step_round, step_iteration, passage_speed_current
+    /// sw need to improve
+    let user_type = 'none'
+    try {
+        user_type = window.location.search.split('?')[1]
+    } catch (error) {
+        user_type = 'none'
+    }
+    if(user_type === undefined) {
+        user_type = 'none'
+    }
+    ///
+    let study_round_min_max  = {}
+    let study_steps = {
+        1:{step:'pre_survey',part:'pre_survey',block:'pre_survey',round:-1,iteration:-1},
+        2:{step:'training',part:'instructions',block:'instructions_overall',round:0,iteration:1},
+
+        3:{step:'training',part:'instructions',block:'instructions_preference',round:0,iteration:1},
+        4:{step:'training',part:'font_competition',block:'preference',round:0,iteration:1},
+        5:{step:'training',part:'font_competition',block:'preference',round:0,iteration:2},
+        6:{step:'training',part:'font_competition',block:'preference',round:0,iteration:3},
+        7:{step:'training',part:'font_competition',block:'preference',round:0,iteration:4},
+        8:{step:'training',part:'font_competition',block:'preference',round:0,iteration:5},
+        9:{step:'training',part:'font_competition',block:'preference',round:0,iteration:6},
+        10:{step:'training',part:'font_competition',block:'preference',round:0,iteration:7},
+        11:{step:'training',part:'instructions',block:'instructions_reading',round:0,iteration:1},
+        12:{step:'training',part:'reading',block:'speed',round:0,iteration:1},
+        13:{step:'training',part:'reading',block:'speed',round:0,iteration:2},
+        14:{step:'training',part:'comprehension_questions',block:'comprehension',round:0,iteration:1},
+        15:{step:'training',part:'passage_questions',block:'mini_questions',round:0,iteration:1},
+        
+        16:{step:'normal',part:'instructions',block:'instructions_preference',round:1,iteration:1},
+        17:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:1},
+        18:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:2},
+        19:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:3},
+        20:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:4},
+        21:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:5},
+        22:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:6},
+        23:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:7},
+        24:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:8},
+        25:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:9},
+        26:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:10},
+        27:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:11},
+        28:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:12},
+        29:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:13},
+        30:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:14},
+        31:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:15},
+        32:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:16},
+        33:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:17},
+        34:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:18},
+        35:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:19},
+        36:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:20},
+        37:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:21},
+        38:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:22},
+        39:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:23},
+        40:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:24},
+        41:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:25},
+        42:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:26},
+        43:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:27},
+        44:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:28},
+        45:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:29},
+        46:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:30},
+        47:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:31},
+        48:{step:'normal',part:'font_validation',block:'preference',round:1,iteration:1},
+        49:{step:'normal',part:'font_validation',block:'preference',round:1,iteration:2},
+        50:{step:'normal',part:'font_validation',block:'preference',round:1,iteration:3},
+        51:{step:'normal',part:'font_validation',block:'preference',round:1,iteration:4},
+        52:{step:'normal',part:'font_validation',block:'preference',round:1,iteration:5},
+        53:{step:'normal',part:'font_validation',block:'preference',round:1,iteration:6},
+
+        54:{step:'normal',part:'instructions',block:'instructions_reading',round:2,iteration:1},
+        55:{step:'normal',part:'reading',block:'speed',round:2,iteration:1},
+        56:{step:'normal',part:'reading',block:'speed',round:2,iteration:2},
+        57:{step:'normal',part:'comprehension_questions',block:'comprehension',round:2,iteration:1},
+        58:{step:'normal',part:'passage_questions',block:'mini_questions',round:2,iteration:1},
+
+        59:{step:'normal',part:'instructions',block:'instructions_reading',round:3,iteration:1},
+        60:{step:'normal',part:'reading',block:'speed',round:3,iteration:1},
+        61:{step:'normal',part:'reading',block:'speed',round:3,iteration:2},
+        62:{step:'normal',part:'comprehension_questions',block:'comprehension',round:3,iteration:1},
+        63:{step:'normal',part:'passage_questions',block:'mini_questions',round:3,iteration:1},
+
+        64:{step:'normal',part:'instructions',block:'instructions_reading',round:4,iteration:1},
+        65:{step:'normal',part:'reading',block:'speed',round:4,iteration:1},
+        66:{step:'normal',part:'reading',block:'speed',round:4,iteration:2},
+        67:{step:'normal',part:'comprehension_questions',block:'comprehension',round:4,iteration:1},
+        68:{step:'normal',part:'passage_questions',block:'mini_questions',round:4,iteration:1},
+
+        69:{step:'normal',part:'instructions',block:'instructions_reading',round:5,iteration:1},
+        70:{step:'normal',part:'reading',block:'speed',round:5,iteration:1},
+        71:{step:'normal',part:'reading',block:'speed',round:5,iteration:2},
+        72:{step:'normal',part:'comprehension_questions',block:'comprehension',round:5,iteration:1},
+        73:{step:'normal',part:'passage_questions',block:'mini_questions',round:5,iteration:1},
+
+        74:{step:'normal',part:'instructions',block:'instructions_reading',round:6,iteration:1},
+        75:{step:'normal',part:'reading',block:'speed',round:6,iteration:1},
+        76:{step:'normal',part:'reading',block:'speed',round:6,iteration:2},
+        77:{step:'normal',part:'comprehension_questions',block:'comprehension',round:6,iteration:1},
+        78:{step:'normal',part:'passage_questions',block:'mini_questions',round:6,iteration:1},
+
+        79:{step:'normal',part:'instructions',block:'instructions_reading',round:7,iteration:1},
+        80:{step:'normal',part:'reading',block:'speed',round:7,iteration:1},
+        81:{step:'normal',part:'reading',block:'speed',round:7,iteration:2},
+        82:{step:'normal',part:'comprehension_questions',block:'comprehension',round:7,iteration:1},
+        83:{step:'normal',part:'passage_questions',block:'mini_questions',round:7,iteration:1},
+
+        84:{step:'normal',part:'instructions',block:'instructions_reading',round:8,iteration:1},
+        85:{step:'normal',part:'reading',block:'speed',round:8,iteration:1},
+        86:{step:'normal',part:'reading',block:'speed',round:8,iteration:2},
+        87:{step:'normal',part:'comprehension_questions',block:'comprehension',round:8,iteration:1},
+        88:{step:'normal',part:'passage_questions',block:'mini_questions',round:8,iteration:1},
+        89:{step:'normal',part:'instructions',block:'instructions_reading',round:8,iteration:1},
+        90:{step:'normal',part:'reading',block:'speed',round:8,iteration:1},
+        91:{step:'normal',part:'reading',block:'speed',round:8,iteration:2},
+        92:{step:'normal',part:'comprehension_questions',block:'comprehension',round:8,iteration:1},
+        93:{step:'normal',part:'passage_questions',block:'mini_questions',round:8,iteration:1},
+
+        94:{step:'normal',part:'instructions',block:'instructions_reading',round:9,iteration:1},
+        95:{step:'normal',part:'reading',block:'speed',round:9,iteration:1},
+        96:{step:'normal',part:'reading',block:'speed',round:9,iteration:2},
+        97:{step:'normal',part:'comprehension_questions',block:'comprehension',round:9,iteration:1},
+        98:{step:'normal',part:'passage_questions',block:'mini_questions',round:9,iteration:1},
+
+        99:{step:'normal',part:'instructions',block:'instructions_reading',round:10,iteration:1},
+        100:{step:'normal',part:'reading',block:'speed',round:10,iteration:1},
+        101:{step:'normal',part:'reading',block:'speed',round:10,iteration:2},
+        102:{step:'normal',part:'comprehension_questions',block:'comprehension',round:10,iteration:1},
+        103:{step:'normal',part:'passage_questions',block:'mini_questions',round:10,iteration:1},
+        104:{step:'final',part:'preferred_font',block:'preferred_font',round:10,iteration:1},
+        105:{step:'final',part:'font_familiarity',block:'font_familiarity',round:10,iteration:1},
+
+        106:{step:'post_survey',part:'post_survey',block:'post_survey',round:11,iteration:1}
+    }
+    let study_steps_pilot2 = {
+        1:{step:'pre_survey',part:'pre_survey',block:'pre_survey',round:-1,iteration:-1},
+        2:{step:'training',part:'instructions',block:'instructions_overall',round:0,iteration:1},
+        3:{step:'training',part:'instructions',block:'instructions_preference',round:0,iteration:1},
+        4:{step:'training',part:'font_competition',block:'preference',round:0,iteration:1},
+        5:{step:'training',part:'font_competition',block:'preference',round:0,iteration:2},
+        6:{step:'training',part:'font_competition',block:'preference',round:0,iteration:3},
+        7:{step:'training',part:'font_competition',block:'preference',round:0,iteration:4},
+        8:{step:'training',part:'font_competition',block:'preference',round:0,iteration:5},
+        9:{step:'training',part:'font_competition',block:'preference',round:0,iteration:6},
+        10:{step:'training',part:'font_competition',block:'preference',round:0,iteration:7},
+        11:{step:'training',part:'instructions',block:'instructions_reading',round:0,iteration:1},
+        12:{step:'training',part:'reading',block:'speed',round:0,iteration:1},
+        13:{step:'training',part:'reading',block:'speed',round:0,iteration:2},
+        14:{step:'training',part:'comprehension_questions',block:'comprehension',round:0,iteration:1},
+        15:{step:'training',part:'passage_questions',block:'mini_questions',round:0,iteration:1},
+        16:{step:'normal',part:'instructions',block:'instructions_preference',round:1,iteration:1},
+        17:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:1},
+        18:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:2},
+        19:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:3},
+        20:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:4},
+        21:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:5},
+        22:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:6},
+        23:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:7},
+        24:{step:'normal',part:'font_validation',block:'preference',round:1,iteration:1},
+        25:{step:'normal',part:'font_validation',block:'preference',round:1,iteration:2},
+        26:{step:'normal',part:'font_validation',block:'preference',round:1,iteration:3},
+        27:{step:'normal',part:'instructions',block:'instructions_reading',round:1,iteration:1},
+        28:{step:'normal',part:'reading',block:'speed',round:1,iteration:1},
+        29:{step:'normal',part:'reading',block:'speed',round:1,iteration:2},
+        30:{step:'normal',part:'comprehension_questions',block:'comprehension',round:1,iteration:1},
+        31:{step:'normal',part:'passage_questions',block:'mini_questions',round:1,iteration:1},
+        32:{step:'normal',part:'instructions',block:'instructions_reading',round:1,iteration:1},
+        33:{step:'normal',part:'reading',block:'speed',round:1,iteration:1},
+        34:{step:'normal',part:'reading',block:'speed',round:1,iteration:2},
+        35:{step:'normal',part:'comprehension_questions',block:'comprehension',round:1,iteration:1},
+        36:{step:'normal',part:'passage_questions',block:'mini_questions',round:1,iteration:1},
+        37:{step:'normal',part:'instructions',block:'instructions_preference',round:2,iteration:1},
+        38:{step:'normal',part:'font_competition',block:'preference',round:2,iteration:1},
+        39:{step:'normal',part:'font_competition',block:'preference',round:2,iteration:2},
+        40:{step:'normal',part:'font_competition',block:'preference',round:2,iteration:3},
+        41:{step:'normal',part:'font_competition',block:'preference',round:2,iteration:4},
+        42:{step:'normal',part:'font_competition',block:'preference',round:2,iteration:5},
+        43:{step:'normal',part:'font_competition',block:'preference',round:2,iteration:6},
+        44:{step:'normal',part:'font_competition',block:'preference',round:2,iteration:7},
+        45:{step:'normal',part:'font_validation',block:'preference',round:2,iteration:1},
+        46:{step:'normal',part:'font_validation',block:'preference',round:2,iteration:2},
+        47:{step:'normal',part:'font_validation',block:'preference',round:2,iteration:3},
+        48:{step:'normal',part:'instructions',block:'instructions_reading',round:2,iteration:1},
+        49:{step:'normal',part:'reading',block:'speed',round:2,iteration:1},
+        50:{step:'normal',part:'reading',block:'speed',round:2,iteration:2},
+        51:{step:'normal',part:'comprehension_questions',block:'comprehension',round:2,iteration:1},
+        52:{step:'normal',part:'passage_questions',block:'mini_questions',round:2,iteration:1},
+        53:{step:'normal',part:'instructions',block:'instructions_reading',round:2,iteration:1},
+        54:{step:'normal',part:'reading',block:'speed',round:2,iteration:1},
+        55:{step:'normal',part:'reading',block:'speed',round:2,iteration:2},
+        56:{step:'normal',part:'comprehension_questions',block:'comprehension',round:2,iteration:1},
+        57:{step:'normal',part:'passage_questions',block:'mini_questions',round:2,iteration:1},
+        58:{step:'normal',part:'instructions',block:'instructions_preference',round:3,iteration:1},
+        59:{step:'normal',part:'font_competition',block:'preference',round:3,iteration:1},
+        60:{step:'normal',part:'font_competition',block:'preference',round:3,iteration:2},
+        61:{step:'normal',part:'font_competition',block:'preference',round:3,iteration:3},
+        62:{step:'normal',part:'font_competition',block:'preference',round:3,iteration:4},
+        63:{step:'normal',part:'font_competition',block:'preference',round:3,iteration:5},
+        64:{step:'normal',part:'font_competition',block:'preference',round:3,iteration:6},
+        65:{step:'normal',part:'font_competition',block:'preference',round:3,iteration:7},
+        66:{step:'normal',part:'font_validation',block:'preference',round:3,iteration:1},
+        67:{step:'normal',part:'font_validation',block:'preference',round:3,iteration:2},
+        68:{step:'normal',part:'font_validation',block:'preference',round:3,iteration:3},
+        69:{step:'normal',part:'instructions',block:'instructions_reading',round:3,iteration:1},
+        70:{step:'normal',part:'reading',block:'speed',round:3,iteration:1},
+        71:{step:'normal',part:'reading',block:'speed',round:3,iteration:2},
+        72:{step:'normal',part:'comprehension_questions',block:'comprehension',round:3,iteration:1},
+        73:{step:'normal',part:'passage_questions',block:'mini_questions',round:3,iteration:1},
+        74:{step:'normal',part:'instructions',block:'instructions_reading',round:3,iteration:1},
+        75:{step:'normal',part:'reading',block:'speed',round:3,iteration:1},
+        76:{step:'normal',part:'reading',block:'speed',round:3,iteration:2},
+        77:{step:'normal',part:'comprehension_questions',block:'comprehension',round:3,iteration:1},
+        78:{step:'normal',part:'passage_questions',block:'mini_questions',round:3,iteration:1},
+        79:{step:'normal',part:'instructions',block:'instructions_preference',round:4,iteration:1},
+        80:{step:'normal',part:'font_competition',block:'preference',round:4,iteration:1},
+        81:{step:'normal',part:'font_competition',block:'preference',round:4,iteration:2},
+        82:{step:'normal',part:'font_competition',block:'preference',round:4,iteration:3},
+        83:{step:'normal',part:'font_competition',block:'preference',round:4,iteration:4},
+        84:{step:'normal',part:'font_competition',block:'preference',round:4,iteration:5},
+        85:{step:'normal',part:'font_competition',block:'preference',round:4,iteration:6},
+        86:{step:'normal',part:'font_competition',block:'preference',round:4,iteration:7},
+        87:{step:'normal',part:'font_validation',block:'preference',round:4,iteration:1},
+        88:{step:'normal',part:'font_validation',block:'preference',round:4,iteration:2},
+        89:{step:'normal',part:'font_validation',block:'preference',round:4,iteration:3},
+        90:{step:'normal',part:'instructions',block:'instructions_reading',round:4,iteration:1},
+        91:{step:'normal',part:'reading',block:'speed',round:4,iteration:1},
+        92:{step:'normal',part:'reading',block:'speed',round:4,iteration:2},
+        93:{step:'normal',part:'comprehension_questions',block:'comprehension',round:4,iteration:1},
+        94:{step:'normal',part:'passage_questions',block:'mini_questions',round:4,iteration:1},
+        95:{step:'normal',part:'instructions',block:'instructions_reading',round:4,iteration:1},
+        96:{step:'normal',part:'reading',block:'speed',round:4,iteration:1},
+        97:{step:'normal',part:'reading',block:'speed',round:4,iteration:2},
+        98:{step:'normal',part:'comprehension_questions',block:'comprehension',round:4,iteration:1},
+        99:{step:'normal',part:'passage_questions',block:'mini_questions',round:4,iteration:1},
+        100:{step:'final',part:'instructions',block:'instructions_preference',round:5,iteration:1},
+        101:{step:'final',part:'font_competition',block:'preference',round:5,iteration:1},
+        102:{step:'final',part:'font_competition',block:'preference',round:5,iteration:2},
+        103:{step:'final',part:'font_competition',block:'preference',round:5,iteration:3},
+        104:{step:'final',part:'font_competition',block:'preference',round:5,iteration:4},
+        105:{step:'final',part:'font_competition',block:'preference',round:5,iteration:5},
+        106:{step:'final',part:'font_competition',block:'preference',round:5,iteration:6},
+        107:{step:'final',part:'font_competition',block:'preference',round:5,iteration:7},
+        108:{step:'final',part:'font_validation',block:'preference',round:5,iteration:1},
+        109:{step:'final',part:'font_validation',block:'preference',round:5,iteration:2},
+        110:{step:'final',part:'font_validation',block:'preference',round:5,iteration:3},
+        111:{step:'final',part:'instructions',block:'instructions_reading',round:5,iteration:1},
+        112:{step:'final',part:'reading',block:'speed',round:5,iteration:1},
+        113:{step:'final',part:'reading',block:'speed',round:5,iteration:2},
+        114:{step:'final',part:'comprehension_questions',block:'comprehension',round:5,iteration:1},
+        115:{step:'final',part:'familiarity_questions',block:'mini_questions',round:5,iteration:1},
+        116:{step:'final',part:'instructions',block:'instructions_reading',round:5,iteration:1},
+        117:{step:'final',part:'reading',block:'speed',round:5,iteration:1},
+        118:{step:'final',part:'reading',block:'speed',round:5,iteration:2},
+        119:{step:'final',part:'comprehension_questions',block:'comprehension',round:5,iteration:1},
+        120:{step:'final',part:'familiarity_questions',block:'mini_questions',round:5,iteration:1},
+        121:{step:'final',part:'preferred_font',block:'preferred_font',round:5,iteration:1},
+        122:{step:'final',part:'font_familiarity',block:'font_familiarity',round:5,iteration:1},
+        123:{step:'post_survey',part:'post_survey',block:'post_survey',round:-1,iteration:-1}
+    }
+    let study_steps_old = {
+        1:{step:'pre_survey',part:'pre_survey',block:'pre_survey',round:-1,iteration:-1},
+        2:{step:'training',part:'instructions',block:'instructions_overall',round:0,iteration:1},
+        3:{step:'training',part:'instructions',block:'instructions_preference',round:0,iteration:1},
+        4:{step:'training',part:'font_competition',block:'preference',round:0,iteration:1},
+        5:{step:'training',part:'font_competition',block:'preference',round:0,iteration:2},
+        6:{step:'training',part:'font_competition',block:'preference',round:0,iteration:3},
+        7:{step:'training',part:'font_competition',block:'preference',round:0,iteration:4},
+        8:{step:'training',part:'font_competition',block:'preference',round:0,iteration:5},
+        9:{step:'training',part:'font_competition',block:'preference',round:0,iteration:6},
+        10:{step:'training',part:'font_competition',block:'preference',round:0,iteration:7},
+        11:{step:'training',part:'instructions',block:'instructions_reading',round:0,iteration:1},
+        12:{step:'training',part:'reading',block:'speed',round:0,iteration:1},
+        13:{step:'training',part:'reading',block:'speed',round:0,iteration:2},
+        14:{step:'training',part:'comprehension_questions',block:'comprehension',round:0,iteration:1},
+        15:{step:'training',part:'passage_questions',block:'mini_questions',round:0,iteration:1},
+        16:{step:'normal',part:'instructions',block:'instructions_preference',round:1,iteration:1},
+        17:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:1},
+        18:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:2},
+        19:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:3},
+        20:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:4},
+        21:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:5},
+        22:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:6},
+        23:{step:'normal',part:'font_competition',block:'preference',round:1,iteration:7},
+        24:{step:'normal',part:'font_validation',block:'preference',round:1,iteration:1},
+        25:{step:'normal',part:'font_validation',block:'preference',round:1,iteration:2},
+        26:{step:'normal',part:'font_validation',block:'preference',round:1,iteration:3},
+        27:{step:'normal',part:'instructions',block:'instructions_reading',round:1,iteration:1},
+        28:{step:'normal',part:'reading',block:'speed',round:1,iteration:1},
+        29:{step:'normal',part:'reading',block:'speed',round:1,iteration:2},
+        30:{step:'normal',part:'reading',block:'speed',round:1,iteration:3},
+        31:{step:'normal',part:'reading',block:'speed',round:1,iteration:4},
+        32:{step:'normal',part:'comprehension_questions',block:'comprehension',round:1,iteration:1},
+        33:{step:'normal',part:'passage_questions',block:'mini_questions',round:1,iteration:1},
+        34:{step:'normal',part:'instructions',block:'instructions_preference',round:2,iteration:1},
+        35:{step:'normal',part:'font_competition',block:'preference',round:2,iteration:1},
+        36:{step:'normal',part:'font_competition',block:'preference',round:2,iteration:2},
+        37:{step:'normal',part:'font_competition',block:'preference',round:2,iteration:3},
+        38:{step:'normal',part:'font_competition',block:'preference',round:2,iteration:4},
+        39:{step:'normal',part:'font_competition',block:'preference',round:2,iteration:5},
+        40:{step:'normal',part:'font_competition',block:'preference',round:2,iteration:6},
+        41:{step:'normal',part:'font_competition',block:'preference',round:2,iteration:7},
+        42:{step:'normal',part:'font_validation',block:'preference',round:2,iteration:1},
+        43:{step:'normal',part:'font_validation',block:'preference',round:2,iteration:2},
+        44:{step:'normal',part:'font_validation',block:'preference',round:2,iteration:3},
+        45:{step:'normal',part:'instructions',block:'instructions_reading',round:2,iteration:1},
+        46:{step:'normal',part:'reading',block:'speed',round:2,iteration:1},
+        47:{step:'normal',part:'reading',block:'speed',round:2,iteration:2},
+        48:{step:'normal',part:'reading',block:'speed',round:2,iteration:3},
+        49:{step:'normal',part:'reading',block:'speed',round:2,iteration:4},
+        50:{step:'normal',part:'comprehension_questions',block:'comprehension',round:2,iteration:1},
+        51:{step:'normal',part:'passage_questions',block:'mini_questions',round:2,iteration:1},
+        52:{step:'normal',part:'instructions',block:'instructions_preference',round:3,iteration:1},
+        53:{step:'normal',part:'font_competition',block:'preference',round:3,iteration:1},
+        54:{step:'normal',part:'font_competition',block:'preference',round:3,iteration:2},
+        55:{step:'normal',part:'font_competition',block:'preference',round:3,iteration:3},
+        56:{step:'normal',part:'font_competition',block:'preference',round:3,iteration:4},
+        57:{step:'normal',part:'font_competition',block:'preference',round:3,iteration:5},
+        58:{step:'normal',part:'font_competition',block:'preference',round:3,iteration:6},
+        59:{step:'normal',part:'font_competition',block:'preference',round:3,iteration:7},
+        60:{step:'normal',part:'font_validation',block:'preference',round:3,iteration:1},
+        61:{step:'normal',part:'font_validation',block:'preference',round:3,iteration:2},
+        62:{step:'normal',part:'font_validation',block:'preference',round:3,iteration:3},
+        63:{step:'normal',part:'instructions',block:'instructions_reading',round:3,iteration:1},
+        64:{step:'normal',part:'reading',block:'speed',round:3,iteration:1},
+        65:{step:'normal',part:'reading',block:'speed',round:3,iteration:2},
+        66:{step:'normal',part:'reading',block:'speed',round:3,iteration:3},
+        67:{step:'normal',part:'reading',block:'speed',round:3,iteration:4},
+        68:{step:'normal',part:'comprehension_questions',block:'comprehension',round:3,iteration:1},
+        69:{step:'normal',part:'passage_questions',block:'mini_questions',round:3,iteration:1},
+        70:{step:'normal',part:'instructions',block:'instructions_preference',round:4,iteration:1},
+        71:{step:'normal',part:'font_competition',block:'preference',round:4,iteration:1},
+        72:{step:'normal',part:'font_competition',block:'preference',round:4,iteration:2},
+        73:{step:'normal',part:'font_competition',block:'preference',round:4,iteration:3},
+        74:{step:'normal',part:'font_competition',block:'preference',round:4,iteration:4},
+        75:{step:'normal',part:'font_competition',block:'preference',round:4,iteration:5},
+        76:{step:'normal',part:'font_competition',block:'preference',round:4,iteration:6},
+        77:{step:'normal',part:'font_competition',block:'preference',round:4,iteration:7},
+        78:{step:'normal',part:'font_validation',block:'preference',round:4,iteration:1},
+        79:{step:'normal',part:'font_validation',block:'preference',round:4,iteration:2},
+        80:{step:'normal',part:'font_validation',block:'preference',round:4,iteration:3},
+        81:{step:'normal',part:'instructions',block:'instructions_reading',round:4,iteration:1},
+        82:{step:'normal',part:'reading',block:'speed',round:4,iteration:1},
+        83:{step:'normal',part:'reading',block:'speed',round:4,iteration:2},
+        84:{step:'normal',part:'reading',block:'speed',round:4,iteration:3},
+        85:{step:'normal',part:'reading',block:'speed',round:4,iteration:4},
+        86:{step:'normal',part:'comprehension_questions',block:'comprehension',round:4,iteration:1},
+        87:{step:'normal',part:'passage_questions',block:'mini_questions',round:4,iteration:1},
+        88:{step:'final',part:'instructions',block:'instructions_preference',round:5,iteration:1},
+        89:{step:'final',part:'font_competition',block:'preference',round:5,iteration:1},
+        90:{step:'final',part:'font_competition',block:'preference',round:5,iteration:2},
+        91:{step:'final',part:'font_competition',block:'preference',round:5,iteration:3},
+        92:{step:'final',part:'font_competition',block:'preference',round:5,iteration:4},
+        93:{step:'final',part:'font_competition',block:'preference',round:5,iteration:5},
+        94:{step:'final',part:'font_competition',block:'preference',round:5,iteration:6},
+        95:{step:'final',part:'font_competition',block:'preference',round:5,iteration:7},
+        96:{step:'final',part:'font_validation',block:'preference',round:5,iteration:1},
+        97:{step:'final',part:'font_validation',block:'preference',round:5,iteration:2},
+        98:{step:'final',part:'font_validation',block:'preference',round:5,iteration:3},
+        99:{step:'final',part:'instructions',block:'instructions_reading',round:5,iteration:1},
+        100:{step:'final',part:'reading',block:'speed',round:5,iteration:1},
+        101:{step:'final',part:'reading',block:'speed',round:5,iteration:2},
+        102:{step:'final',part:'reading',block:'speed',round:5,iteration:3},
+        103:{step:'final',part:'reading',block:'speed',round:5,iteration:4},
+        104:{step:'final',part:'comprehension_questions',block:'comprehension',round:5,iteration:1},
+        105:{step:'final',part:'familiarity_questions',block:'mini_questions',round:5,iteration:1},
+        106:{step:'final',part:'preferred_font',block:'preferred_font',round:5,iteration:1},
+        107:{step:'final',part:'font_familiarity',block:'font_familiarity',round:5,iteration:1},
+        108:{step:'post_survey',part:'post_survey',block:'post_survey',round:-1,iteration:-1}
+    }
+
+    // fix zoom function
+    //var scale = 'scale(1)'
+    //document.body.style.webkitTransform = scale  // Chrome, Opera, Safari
+    //document.body.style.msTransform = scale     // IE 9
+    //document.body.style.transform = scale      // General
+
+    let id_user = rand_num()
+    get_id_user() // sw - needs to be improved, works for now
+    let device = get_device()
+
+    let toggle_icon = "<span class='icon'><i class='fas fa-home'></i></span>"
+    let choice_enabled_text  = "<span class='icon'></span><i class='far fa-thumbs-up' style='margin-right:.25em'></i>I prefer the current font</span>"
+    let choice_disabled_text = "<span class='icon'></span><i class='far fa-thumbs-up' style='margin-right:.25em'></i>Please toggle the font first</span>"
+    let proceed_questions_enabled_text = "<span class='icon'></span><i class='far fa-thumbs-up' style='margin-right:.25em'></i>Proceed to next step...</span>"
+    let proceed_questions_disabled_text = "<span class='icon'></span><i class='far fa-thumbs-up' style='margin-right:.25em'></i>Please answer the above questions</span>"
+    let reading_class = 'reading ' // sw - space after reading is intentional
+
+    let a_active = true
+    let font_a = ''
+    let font_b = ''
+    let font_champ = 'times'
+    let font_reading = 'times'
+    let dwell_start, dwell_time_a, dwell_time_b, font_a_views, font_b_views = 0
+    let dwell_a_pause, dwell_b_pause, speed_pause = 0
+
+    let fonts = {
+        'times':{font:'Times',fact:', ‘is solid, formal, and simple. It is popular for newspapers, magazines, and corporate documents. Fashion brands that use this font include Gucci and Burberry.'}, 
+        'arial':{font:'Arial',fact:'is round and soft. It was a standard Microsoft font for a while and can be found everywhere, from signage to magazines, and UPS. Fashion brands that use this font include Tommy Hilfiger and Dior.'},
+        'calibri':{font:'Calibri',fact:'is warm, soft, and rounded. It is the default typeface of Microsoft Office and much other Microsoft software. This font was at the center of a political scandal in Pakistan in 2017!'},
+        'roboto':{font:'Roboto',fact:'has straight-sided capitals and distinctive racetrack-shaped rounded letters. It was developed by Google as the system font for Android.'},
+        'open_sans':{font:'Open Sans',fact:'is open and friendly. It is a popular modern web font used frequently by Google and on more than 20 million websites.'},
+        'lato':{font:'Lato',fact:'is described by its designer as “male and female, serious but friendly”. It is a popular web font used by over 12 thousand websites.'},
+        'avantgarde':{font:'Avant Garde',fact:'\’s design is inspired by geometric shapes, like near-perfect circles and squares. It is a font family based on the logo font used in the Avant Garde magazine. Also, the Netflix TV series, Master of None, famously used the font for its title cards.'},
+        'system':{font:'System Font',fact:'everyone has a system font on their computer. Imagine how much reading you do per day with your system font?'},
+        'montserrat':{font:'Montserrat',fact:'is geometric and elegant. It was inspired by the signage found in a historic neighborhood of Buenos Aires! Armani is a fashion brand that uses this font.'},
+        'noto_sans':{font:'Noto Sans',fact:'family of fonts were designed to be used across many languages for computers. All possible characters are present, so no missing letterboxes commonly referred to as \"tofu\" will be rendered. In fact, Noto is short for \"No mOre TOfu.\"'},
+        'poynter_gothic_text':{font:'Poynter Gothic Text',fact:'is classical, balanced, and light. It is a print font that is good for reading newspapers.'},
+        'helvetica':{font:'Helvetica',fact:'is dense, solid, and neutral. It is used for all the lettering on the New York subway signage and many U.S. government forms. A fashion brand that uses this font is American Apparel.'},
+        'garamond':{font:'Garamond',fact:'is classic, elegant, and has an old-style look. It is used in the Harry Potter and Dr. Seuss books, and by the fashion brand Abercrombie &amp; Fitch.'},
+        'oswald':{font:'Oswald',fact:'is informal, bold, and modern. It is a popular web font used for conferences, events, and portfolios.'},
+        'franklin_gothic':{font:'Franklin Gothic',fact:'is solid and important. It is considered a standard in the newspaper and advertising fields. It is the official typeface of the MOMA in New York City, and has been used for subtitles for “Star Wars”, and for logos for TNT, ESPN, and CBS Sports.'},
+        'utopia':{font:'Utopia',fact:', is solid, professional, classical. It is commonly used in advertising, newspaper, and book publishing.'}
+    }
+
+    let fonts_joke = ['comic_sans','verdana','raleway','georgia']
+    let fonts_joke_names = {'comic_sans':'Comic Sans','verdana':'Verdana','raleway':'Raleway','georgia':'Georgia'}
+
+    let fonts_available = Object.keys(fonts)
+    let fonts_champions  = []
+    let fonts_to_read    = []
+    let fonts_eliminated = []
+    let fonts_wpm = init_fonts_wpm()
+
+    function init_fonts_wpm() {
+        temp = {}
+        fonts_available.forEach(f => {
+            temp[f] = []
+        });
+        return temp
+    }
+
+    let text_choices = {
+        18:{source:"katie (gutenberg)",pdf_corpus1:"",pdf_corpus2:"Steamboats on the Erie Canal",passage1:"During the spring of 1858, a well-to-do farmer of western New York whittled a spiral screw-propeller to help traverse the Erie Canal, one of the most important waterways that connected Lake Erie to the Hudson River. This screw-propeller allowed him to conveniently ship goods throughout the midwest of the United States. Soon after, this farmer contracted for a boat to be built that would be powered by steam. Although advised by his builders to substitute the common four-bladed propellers from older versions of boats, he stuck to his original design.",passage2:"With one propeller at either side of the rudder—called &quot;twin-propellers&quot;—the boat was ready for use. This boat is now known as the Charles Wack. The following season of 1859 was the most active year the Erie Canal has ever known in regard to steam. The Charles Wack was sold to Mr. Prosser, who took out the original propellers, and substituted a modern propeller. This doubled its engine capacity.",passage3:"",passage4:"",question1:"The Erie Canal connected Lake Erie to the:",choice1_q1:"Atlantic Ocean",choice2_q1:"Hudson River",choice3_q1:"Mississippi River",answer_q1:"Hudson River",question2:"The boat, Charles Wack, used ___________ propellers to in its design.",choice1_q2:"Single",choice2_q2:"Triple",choice3_q2:"Twin",answer_q2:"Twin",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        19:{source:"katie (gutenberg)",pdf_corpus1:"",pdf_corpus2:"How to Identify Trees",passage1:"There are many ways in which the problem of identifying trees may be approached. In almost every tree there is at least one trait that marks its individuality and separates it from other trees. It may be the general form of the tree, its mode of branching, bark, bud, or fruit. It may be some variation in color, or, in the case of the evergreen trees, it may be the number and position of the needles or leaves. The pines belong to the coniferous class of trees; that is, trees that bear cones.",passage2:"The pines may be identified from the other coniferous trees by their leaves, which are in the form of needles two inches or more in length. The pine needles are arranged in clusters. Each species has a certain number of needles to the cluster. This is one of the simplest and most direct ways of distinguishing the different pines. In the white pine there are five needles to each cluster, in the pitch pine there are three, and in the Scotch pine there are two. ",passage3:"",passage4:"",question1:"Characters that allow you to identify different types of trees include:",choice1_q1:"Variation of color and form",choice2_q1:"The number and position of needles and leaves",choice3_q1:"Both a and b",answer_q1:"Both a and b",question2:"One way to identify a pine tree is by noticing how the pine needles are arranged:",choice1_q2:"Randomly",choice2_q2:"In groups of exactly 20",choice3_q2:"In clusters",answer_q2:"In clusters",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        20:{source:"katie (gutenberg)",pdf_corpus1:"",pdf_corpus2:"Viewing the Sun and the Stars",passage1:"The dominant member of the solar system is the sun. Its volume is more than a million times that of the earth. Its temperature is far higher than any that can be produced on the earth, even in the most efficient electric furnaces. Tools, like high powered telescopes, are used to show that the sun contains many elements, particularly metals. The stars that seem to fill the sky on a clear night are suns. Many of these stars are much larger and more brilliant than our own sun.",passage2:"They appear to be relatively faint points of light in the sky because of their enormous distances from us. The nearest of them is so remote that it would take more than four years for its light to come to the solar system; and others, still within the range of large telescopes, are a thousand times more distant. There are only about 5000 stars visible to the naked eye, but great photographic telescopes that are now used, show several hundreds of millions of them.",passage3:"",passage4:"",question1:"The sun is composed of many elements including:",choice1_q1:"Sand",choice2_q1:"Rock",choice3_q1:"Metal",answer_q1:"Metal",question2:"Although we can view many stars with the naked eye, it would take nearly _________ years for the nearest star’s light to come into our solar system.",choice1_q2:"4",choice2_q2:"20",choice3_q2:"50",answer_q2:"4",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        21:{source:"katie (gutenberg)",pdf_corpus1:"",pdf_corpus2:"Beethoven’s Early Life",passage1:"At age 15, young Beethoven played the organ every morning at the six o'clock mass in the Minorite church that he and his family attended. As a creative young mind, he took an interest in other composers’ works. He studied Bach’s compositions so much that he was able to play the greater part of the &quot;Well-tempered Clavichord&quot; at twelve years old. As a boy, he was shy and reserved. Instead of playing with children his age, he began learning the art of music composition.",passage2:"In fact, he is said to have written a cantata at the age of ten. When he was seventeen he went to Vienna, Italy. Here, he met Mozart who was at the height of his fame. On his first meeting with Mozart, Beethoven performed a composition influenced by the great composer. In fact, he played with such an effect and such emotion that when he finished, Mozart made a remark that people should, &quot;Pay attention to him. He will make a noise in the world some day.&quot;",passage3:"",passage4:"",question1:"One of the composers who Beethoven admired was:",choice1_q1:"Bach",choice2_q1:"Chopin",choice3_q1:"Haydn",answer_q1:"Bach",question2:"Beethoven’s first meeting with Mozart was in:",choice1_q2:"Italy",choice2_q2:"Austria",choice3_q2:"Romania",answer_q2:"Italy",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        22:{source:"katie (gutenberg)",pdf_corpus1:"",pdf_corpus2:"Benjamin Franklin’s Great Inventions",passage1:"Benjamin Franklin was a great inventor. He believed that the electricity in a Leyden Jar, an antique electrical device consisting of a glass jar and metal foil which could store static electricity, was the same thing as the lightning we see in a thunderstorm. He made a kite out of a silk handkerchief, and fastened a sharp iron point to the upright stick of the kite. One day, when a thunder-storm was coming, Franklin and his son went out to the fields.",passage2:"The kite was raised; then Franklin tied an iron key to the lower end of the string. After waiting some time, he felt certain that the electricity was coming down the string. He put his knuckle close to the key, and a spark flew out. Next, he took his Leyden Jar and collected the electricity in that. He had made two great discoveries that day: he found out that electricity and lightning are the same thing, and he had also found how to fill his Leyden jar directly from the clouds.",passage3:"",passage4:"",question1:"A Leyden jar is:",choice1_q1:"A jar for storing perishable goods",choice2_q1:"An electrical device that held electricity",choice3_q1:"An antique lightbulb",answer_q1:"An electrical device that held electricity",question2:"Franklin discovered that electricity is:",choice1_q2:"The same as lightning",choice2_q2:"A different makeup than lightning",choice3_q2:"Entirely different than lightning",answer_q2:"The same as lightning",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        23:{source:"katie (gutenberg)",pdf_corpus1:"",pdf_corpus2:"The Baltimore and Ohio Railroad",passage1:"On February 12, 1827, two men - Philip E. Thomas and George Brown - held a meeting to determine the best way to restore trade that had been lost in the Baltimore region. The result was a petition to open &quot;The Baltimore and Ohio Railroad Company&quot; which would have the right to build and operate a railroad from the city of Baltimore to the Ohio River. The construction of the railroad began on July 4, 1828.",passage2:"Charles Carroll, the only surviving signer of the Declaration of Independence, was invited to lay the first stone down to signify the start of construction. He said, &quot;I consider this among the most important acts of my life, second only to my signing the Declaration of Independence.&quot; By 1832, the whole line had been opened, making the railroad a total of seventy-two miles in all. By 1842, the railroad had more than 500 miles of track. This construction began a new era of transportation and efficiency for the American people.",passage3:"",passage4:"",question1:"Philip E. Thomas and George Brown were in charge of:",choice1_q1:"Building a canal through Maryland",choice2_q1:"Pioneering building a railroad from Baltimore to Cleveland, Ohio",choice3_q1:"Pioneering building a railroad from Baltimore to the Ohio River",answer_q1:"Pioneering building a railroad from Baltimore to the Ohio River",question2:"Charles Carroll, an honored guest at the groundbreaking for the railroad, was one of the men who signed the:",choice1_q2:"Constitution",choice2_q2:"Declaration of Independence",choice3_q2:"Bill of Rights",answer_q2:"Declaration of Independence",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        24:{source:"katie (gutenberg)",pdf_corpus1:"",pdf_corpus2:"Water Vessels in the Pueblo Region",passage1:"The Pueblo region of the United States is historically known as an area where pottery was practiced and worked to perfection. The Pueblos’ first necessity of life is the transportation and preservation of water. In an effort to transport water, the people once tried using skins of animals, but this was unsuccessful as the water sitting in animal skins in a hot climate would contaminate it. Later, a more successful water vessel was created. They were tubes of wood or sections of canes.",passage2:"Although these canes grew in abundance in this area, another, more effective water vessel came into play. Gourds, which also grew in abundance in these places, were better shapes and held a larger volume of water. To help protect and transport the gourd, it was encased in a net of coarse wicker like rope which was made out of yucca leaves or of flexible splints. The use of this wicker with water-vessels points toward the development of the water-tight basketry of the southwest.",passage3:"",passage4:"",question1:"The first vessel used to transport water was made out of:",choice1_q1:"Canvas",choice2_q1:"Animal skin",choice3_q1:"Leaves",answer_q1:"Animal skin",question2:"The development of baskets resulted in the water vessel being:",choice1_q2:"Unbreakable",choice2_q2:"Water-tight",choice3_q2:"Temperature regulated",answer_q2:"Water-tight",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        25:{source:"katie (gutenberg)",pdf_corpus1:"",pdf_corpus2:"Navaho Houses",passage1:"The Navajo reservation is a large area of land in the northeastern part of Arizona and the northwestern corner of New Mexico. The Navaho recognize two distinct classes of hogans, winter huts and summer shelters. Winter huts are a staple of Navajo culture. On the outside, they resemble mounds of earth hollowed out. However, they are warm and comfortable. Decoration on the inside or outside of the houses is uncommon, yet, the hogans are usually referred to as &quot;beautiful.&quot;",passage2:"The rules for building a winter house do not apply to the summer huts. The summer hut is one of the most primitive and simple shelters the Navajo builds. 4 to 5 feet of branches are piled on three sides of a circle 15 or 20 feet in diameter. A fire is built in the center and blankets are thrown over outstanding branches here and there, creating a great amount of shade during the hot summer days. Although it is a makeshift shelter, it is effective to escape from the brutal heat.",passage3:"",passage4:"",question1:"Winter huts are described as:",choice1_q1:"Rough",choice2_q1:"Beautiful",choice3_q1:"Earthy",answer_q1:"Beautiful",question2:"Summer huts are usually:",choice1_q2:"Permanent homes",choice2_q2:"Beautiful",choice3_q2:"Makeshift",answer_q2:"Makeshift",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        26:{source:"katie (gutenberg)",pdf_corpus1:"",pdf_corpus2:"Into the Unknown",passage1:"It was a white caravan that looked down from the crest of the mountains upon the green wilderness called Kentucky. The travelers saw the land of hope before them, a wide sweep of rolling country, covered with trees. They were alive with interest and curiosity, because this unknown land was to be their home, but no one was more eager than Henry Ware, a strong, fifteen year old boy. The long journey from their old home in Maryland had been a delight to Henry.",passage2:"There were no tearful goodbyes as he left. Henry’s entire family came on the journey: his mother, brother and younger sister were in the fourth wagon from the right, and his father stood beside it. As they moved forward, Henry felt like he was coming home, like he had seen this place before. The forests and the mountains were a friendly sight. He seemed to breathe a newer and fresher air than that of Maryland that he left behind, and his mind expanded with the thought of what was to come.",passage3:"",passage4:"",question1:"This story takes place as travellers moved through:",choice1_q1:"Nebraska",choice2_q1:"Colorado",choice3_q1:"Kentucky",answer_q1:"Kentucky",question2:"Henry traveled with:",choice1_q2:"His rifle",choice2_q2:"His entire family",choice3_q2:"His friends",answer_q2:"His entire family",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        27:{source:"katie (gutenberg)",pdf_corpus1:"",pdf_corpus2:"Journey to The Coral Islands",passage1:"It was a bright, warm day when our ship sailed for the regions of the south. There were a number of boys on the ship, but two of them were my favorites. Jack Martin was a tall, broad-shouldered boy of eighteen, with a handsome, good-humoured face. My other companion was Peterkin Jay. He was little, quick, funny, mischievous, and about fourteen years old. Days dragged on as our friendship grew, and after a while, the days started to blur together.",passage2:"When we approached Cape Horn, the weather became very cold and stormy, and the sailors began to tell stories about the furious gales and the dangers of that terrible cape. Nevertheless we passed the dreaded cape without much rough weather. At last we came among the Coral Islands of the Pacific; and I shall never forget the delight when I looked upon the pure white, dazzling shores, and the rich green palm-trees. The three of us longed to be on land once again.",passage3:"",passage4:"",question1:"The name of the narrator is:",choice1_q1:"Jack",choice2_q1:"Petekin",choice3_q1:"We never learn it",answer_q1:"We never learn it",question2:"The ship traveled around:",choice1_q2:"Cape Horn",choice2_q2:"Cape May",choice3_q2:"Cape Cod",answer_q2:"Cape Horn",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        28:{source:"katie (gutenberg)",pdf_corpus1:"",pdf_corpus2:"Phil the Fiddler",passage1:"&quot;Viva Garibaldi!&quot; sang a young Italian boy in an uptown street. He held a battered violin that looked as if it had been used for generations. The young singer was twelve years old, but small for his age. In spite of the dirt, his face was strikingly handsome, especially when he smiled. He was always smiling in spite of hardships, which were many in his life. Phil had been wandering the streets, singing and playing for two hours. However, he had not received a penny.",passage2:"He was about to change his position when the basement door of one of the houses opened, and a servant came out. &quot;My young master wants to hear you play on your fiddle,&quot; said the servant. &quot;He’s sick, and can’t come out.&quot; Phil followed through the giant house up to the parlor where the sick boy sat. The little fiddler, who had never been invited into a fine house before, looked with admiration at the handsome furniture. He knew that this could be a moment that changed his life.",passage3:"",passage4:"",question1:"Phil’s violin was:",choice1_q1:"New and pristine",choice2_q1:"An antique",choice3_q1:"Old and battered",answer_q1:"Old and battered",question2:"Phil was singing and playing the violin in order to:",choice1_q2:"Make money",choice2_q2:"Gain Experience",choice3_q2:"Find a musical partner",answer_q2:"Make money",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""}
+    }
+
+    let text_choices_old = {
+        0:{source:"https://www.beelinereader.com",pdf_corpus1:"History",pdf_corpus2:"No Copyright",passage1:"John Fitzgerald Kennedy was born in Brookline, Massachusetts on May 29, 1917. He was the second son of Joseph P. Kennedy, Sr., and Rose Fitzgerald. Rose was the eldest child of John Fitzgerald, a prominent Boston political figure who was the city's mayor and a three-term member of Congress. Kennedy's ancestry was predominantly Irish, and all eight of his great-grandparents had immigrated from Ireland. Kennedy lived in Brookline for ten years. In 1927, the family moved to New York City.",passage2:"In the summertime, Kennedy and his family visited their home in Hyannisport, Massachusetts. At Christmas and Easter holidays they went to their winter home in Palm Beach, Florida. In September 1931, Kennedy was sent to The Choate School in Wallingford, Connecticut, for high school. His older brother, Joe Jr., had already been at Choate for two years.",passage3:"Kennedy spent his first years at Choate in his brother's shadow, and compensated for this with rebellious behavior. On one occasion, he and his friends exploded a toilet seat with a powerful firecracker. In the ensuing chapel assembly, the strict headmaster, George St. John, brandished the toilet seat and spoke of certain muckers who would spit in our sea. The defiant Kennedy took the cue and named his group The Muckers Club. Kennedy graduated from Choate in June 1935. For the school yearbook, of which he had been business manager, Kennedy was voted the most likely to succeed.",passage4:"In September 1936, Kennedy enrolled at Harvard College, where he tried out for the football, golf, and swim teams and earned a spot on the varsity swim team. At Harvard, Kennedy also developed an interest in political philosophy. He graduated with a degree in International Affairs. Many years later, he went on to become the 35th president of the United States.",question1:"JFK and his friends exploded a",choice1_q1:"Toilet seat",choice2_q1:"Bathtub",choice3_q1:"Armoire",answer_q1:"Toilet seat",question2:"JFK's grandparents were all:",choice1_q2:"German",choice2_q2:"Irish",choice3_q2:"Swiss",answer_q2:"Irish",question3:"JFK's classmates voted him:",choice1_q3:"Most likely to succeed",choice2_q3:"Best hair",choice3_q3:"Most likely to fail",answer_q3:"Most likely to succeed"},
+        1:{source:"https://www.beelinereader.com",pdf_corpus1:"Nature",pdf_corpus2:"No Copyright",passage1:"Dolphins are social and live in groups known as pods. Pods can contain up to a dozen dolphins. In places with an abundance of food, pods can merge temporarily, forming a superpod. Such groupings may exceed 1,000 dolphins. Dolphins communicate using a variety of clicks and whistle-like sounds. Membership in pods is not rigid. However, dolphins can establish strong social bonds. For example, they will stay with injured or ill dolphins, even helping them to breathe by bringing them to the surface if needed.",passage2:"This altruism does not appear to be limited to their own species. A dolphin in New Zealand has been observed guiding a female Pygmy Sperm Whale together with her calf out of shallow water where they had stranded several times. They have also been seen protecting swimmers from sharks by swimming circles around the swimmers or charging the sharks to make them go away. Dolphins also display culture, something long believed to be unique to humans, and possibly other primate species.",passage3:"In May 2005, a discovery in Australia found bottlenose dolphins teaching their young to use tools. They cover their snouts with sponges to protect them while foraging. This knowledge is mostly transferred by mothers to daughters, unlike primates, where knowledge is generally passed on to both sexes. Using sponges as mouth protection is a learned behavior. Another learned behavior was discovered among river dolphins in Brazil, where some male dolphins use weeds and sticks as part of a mating display.",passage4:"Dolphins also engage in acts of aggression towards each other. The older a male dolphin is, the more likely his body is to be covered with bite scars. Male dolphins engage in such acts of aggression apparently for the same reasons as humans: disputes between companions and competition for females. Acts of aggression can become so intense that targeted dolphins sometimes go into exile as a result of losing a fight.",question1:"What is the name of a group of dolphins?",choice1_q1:"a school",choice2_q1:"a pod",choice3_q1:"a herd",answer_q1:"a pod",question2:"Do dolphins pass cultural knowledge to their offspring?",choice1_q2:"yes",choice2_q2:"no",choice3_q2:"sometimes",answer_q2:"yes",question3:"Do dolphins ever fight with each other?",choice1_q3:"Yes, only males",choice2_q3:"No, always",choice3_q3:"Yes, sometimes",answer_q3:"Yes, sometimes"},
+        2:{source:"https://www.beelinereader.com",pdf_corpus1:"Fiction",pdf_corpus2:"No Copyright",passage1:"Every Saturday morning, Olivia would wake up early to go to her weekly tennis lesson. The first thing she did to get ready was to eat a healthy breakfast. Her favorite breakfast was toast, fruit, and yogurt. It tasted great, and it kept her feeling energized all through the morning. After breakfast, Olivia put on her tennis outfit and tennis shoes. She tied her shoes tight, just like her coach taught her.",passage2:"When Olivia arrived at the tennis courts, the first thing she did was stretch. She wanted to make sure that her body was warmed up and ready to go before starting to play tennis. She stretched her legs first, and then she stretched her arms. Before Olivia started her lesson, her coach would always remind her what skills she needed to work on.",passage3:"Her coach's reminders helped her to focus on those skills during the lesson. He would often tell her to keep her eye on the ball so that she could hit it right in the middle of the racquet. During the tennis lesson, Olivia's coach practiced drills with her. He would hit the ball to her right or to her left, and she would have to hit the ball back to her coach. Olivia was good at drills, and she liked practicing them so that she could get even better.",passage4:"Sometimes Olivia's coach would set up targets for her to hit at. This was Olivia's favorite part because she liked the sound the ball made when she hit a target. At the end of the lesson, Olivia always stretched her arms and legs again so that she wouldn't get sore. She was usually pretty thirsty, so she would also drink a lot of water. If she was lucky, her mom would take her out for ice cream after her lesson.",question1:"What meal did Olivia eat before her tennis lesson?",choice1_q1:"Breakfast",choice2_q1:"Lunch",choice3_q1:"Dinner",answer_q1:"Breakfast",question2:"What did Olivia's coach talk to her about before starting her lesson?",choice1_q2:"Tennis matches that he watched on TV",choice2_q2:"Skills that Olivia should focus on during the lesson",choice3_q2:"The weather",answer_q2:"Skills that Olivia should focus on during the lesson",question3:"When did Olivia do stretches?",choice1_q3:"Only at the beginning of the lesson",choice2_q3:"Only at the end of the lesson",choice3_q3:"At both the beginning and end of the lesson",answer_q3:"At both the beginning and end of the lesson"},
+        3:{source:"https://www.beelinereader.com",pdf_corpus1:"Fiction",pdf_corpus2:"No Copyright",passage1:"Marcus couldn't wait to go to Yosemite National Park with his family. He had heard about the towering mountains and the wild animals, and he was excited to see it all for himself. The car ride to Yosemite took many hours, and Marcus spent the whole time reading about the waterfalls and rivers that Yosemite is famous for. Marcus and his family arrived in Yosemite just as the sun was starting to set.",passage2:"They hurried to unpack their camping supplies from the car before the sun disappeared behind the mountains. Marcus set up the tent while his sister started a campfire in the fire pit. The family sat on logs around the campfire and roasted marshmallows until the fire died out. The next morning, Marcus and his dad woke up at dawn and walked through a nearby meadow. Marcus took photos of deer that were eating grass and shrubs.",passage3:"His father helped him hold the camera steady so that the photos would look good. After the deer left the meadow, Marcus chased after chipmunks, trying to take pictures of them too. In the afternoon, Marcus's family went to see Yosemite Falls, one of the waterfalls that Marcus had read about. The waterfall was even bigger in real life than Marcus had imagined.",passage4:"The water coming over the waterfall crashed down on the rocks below and made a loud noise like a rushing river. Marcus knew that he shouldn't get too close to the waterfall because they can be dangerous. Marcus and his family spent a whole week in Yosemite. They admired the natural beauty of the wildlife and breathed in the clean mountain air. At the end of the trip, they decided to come back again the next year.",question1:"Who went to Yosemite with Marcus?",choice1_q1:"His classmates",choice2_q1:"His family",choice3_q1:"His dog",answer_q1:"His family",question2:"What did Marcus cook on the campfire?",choice1_q2:"Marshmallows",choice2_q2:"Deer",choice3_q2:"Hot dogs",answer_q2:"Marshmallows",question3:"What did Marcus do when he was walking in the meadow?",choice1_q3:"He took photos.",choice2_q3:"He collected wood.",choice3_q3:"He collected pebbles.",answer_q3:"He took photos."},
+        4:{source:"https://www.beelinereader.com",pdf_corpus1:"Nature",pdf_corpus2:"No Copyright",passage1:"Adult tigers lead solitary lives and congregate only on a temporary basis when special conditions permit, such as plentiful supply of food. They establish and maintain home ranges. Resident adults of either sex tend to confine their movements to a definite territory, within which they satisfy their needs. Those sharing the same ground are well aware of each other's movements and activities.",passage2:"The size of a tiger's home range mainly depends on the amount of prey, and, in the case of male tigers, on access to females. A tigress may have a territory of 8 square miles, while the territories of males are much larger, covering 30 square miles. The range of a male tends to overlap those of several females.",passage3:"The relationships between individuals can be quite complex, and apparently tigers follow no set rule with regards to territorial rights and infringing territories. For instance, although for the most part tigers avoid each other, both male and female tigers have been documented sharing kills, usually with tigers of the opposite sex, or tiger cubs. In contrast to male lions, male tigers will allow the females and cubs to feed on the kill first.",passage4:"Furthermore, tigers seem to behave relatively amicably when sharing kills, in contrast to lions, which tend to squabble and fight. Unrelated tigers have also been observed feeding on prey together. When young female tigers first establish a territory, they tend to do so fairly close to their mother's area. The overlap between the female and her mother's territory tends to decrease over time. Males, however, wander further than females and set out at a younger age to mark out their own area.",question1:"How often do tigers share food with each other?",choice1_q1:"Always",choice2_q1:"Sometimes",choice3_q1:"Never",answer_q1:"Sometimes",question2:"Which is larger, the roaming range of a male tiger or the range of a female tiger?",choice1_q2:"Male tigers roam over a larger range",choice2_q2:"The ranges are the same size.",choice3_q2:"Female tigers roam over a larger range.",answer_q2:"Male tigers roam over a larger range",question3:"Do male or female tigers leave their family at a younger age?",choice1_q3:"Male tigers generally leave first.",choice2_q3:"Female tigers generally leave first.",choice3_q3:"They leave at the same age.",answer_q3:"Male tigers generally leave first."},
+        5:{source:"https://www.beelinereader.com",pdf_corpus1:"History",pdf_corpus2:"No Copyright",passage1:"Susan B. Anthony was born in 1820 to Daniel Anthony and Lucy Read and was raised in Adams, Massachusetts. She was the second-oldest of seven children. She grew up in the Quaker faith and believed in hard work and a simple life. Her brother Daniel became active in the anti-slavery movement in Kansas, and her sister Mary became a teacher and a women's-rights activist. Anthony remained close to her sisters throughout her life.",passage2:"Susan was a precocious child, having learned to read and write at age three. In 1826, when Susan was six years old, the Anthony family moved from Massachusetts to Battenville, New York. Susan was sent to attend a local district school, where a teacher refused to teach her long division because of her gender. Upon learning of the weak education she was receiving, her father promptly had her placed in a group home school, where he taught Susan himself.",passage3:"In 1837, Susan was sent to a Quaker boarding school in Philadelphia. She was not happy there, but she did not have to stay for long. She was forced to end her formal studies because her family, like many others, was financially ruined during the Panic of 1837. In 1839, the family moved to Hardscrabble, New York, in the wake of the panic and economic depression that followed. That same year, Susan left home to teach and pay off her father's debts.",passage4:"She taught first at Eunice Kenyon's Friends' Seminary, and then at the Canajoharie Academy in 1846, where she rose to become headmistress of the Female Department. Anthony's first occupation inspired her to fight for wages equivalent to those of male teachers, since men earned roughly four times more than women for the same duties. Susan went on to become one of the most prominent leaders in the women's rights movement.",question1:"Susan was raised as a:",choice1_q1:"Mormon",choice2_q1:"Catholic",choice3_q1:"Quaker",answer_q1:"Quaker",question2:"Susan's first job was as a:",choice1_q2:"Seamstress",choice2_q2:"Teacher",choice3_q2:"Baker",answer_q2:"Teacher",question3:"Susan's teacher refused to teach girls:",choice1_q3:"Fractions",choice2_q3:"Science",choice3_q3:"Long Division",answer_q3:"Long Division"}
+    }
+
+    let text_choices_pilot2 = {
+        //999:{source:"", source_url:"", pdf_corpus1:"", pdf_corpus2:"", passage1:"", passage2:"", passage3:"", passage4:"", question1:"", choice1_q1:"", choice2_q1:"", choice3_q1:"", answer_q1:"", question2:"", choice1_q2:"", choice2_q2:"", choice3_q2:"", answer_q2:"", question3:"", choice1_q3:"", choice2_q3:"", choice3_q3:"", answer_q3:""},
+        6:{source:"framingham", source_url:"https://docs.google.com/document/d/19ySFD7FLJ-1zn6XR0DuapULnF3xesD8CsNzpIfr6F_M/edit",pdf_corpus1:"Nature",pdf_corpus2:"",passage1:"We all look different. Some of us are short, some of us are tall. Some of us have big feet, some of us have small feet. Even though we all look different, our bodies are all made up of the same things. First, we have bones. Our bones give us shape. Because bones don’t bend, we are able to stand up. The bones move our joints, the places where they come together. ",passage2:"Muscles are fastened to our bones. They make us strong and able to move. Our muscles have nerves, tiny cells that send messages to our brain telling it which part of our body to move. We are all covered by our skin. Our skin protects us. Our skin is waterproof, and it keeps our bodies cool by letting us sweat.",passage3:"",passage4:"",question1:"Our skin",choice1_q1:"Makes us strong",choice2_q1:"Protects us",choice3_q1:"Helps us breathe",answer_q1:"Protects us",question2:"Our bones",choice1_q2:"Are really light",choice2_q2:"Are really strong",choice3_q2:"Don’t bend",answer_q2:"Don’t bend",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        //7:{source:"framingham", source_url:"https://docs.google.com/document/d/19ySFD7FLJ-1zn6XR0DuapULnF3xesD8CsNzpIfr6F_M/edit",pdf_corpus1:"Poetry",pdf_corpus2:"",passage1:"Have you ever seen the moon shining bright on a dark night? Have you ever wondered just who or what is out when the moon is out? The moon has a face like a clock on the wall; She shines on thieves on the garden stall, On streets and fields and harbor quays And birdies asleep in the branches of trees",passage2:"The squealing cat and the squeaking mouse. The howling dog by the backdoor of the house. The black bat that lies in its bed till noon. All love to be out at night in the light of the moon. But of all the things that belong to the day, Cuddle to sleep to be out of her way; And flowers and children close their eyes, Till up in the morning the sun shall rise.",passage3:"",passage4:"",question1:"According to the poem, the moon",choice1_q1:"Likes being out at night",choice2_q1:"Does not like being out at night",choice3_q1:"The poem does not actually say how the moon feels at all",answer_q1:"The poem does not actually say how the moon feels at all",question2:"The poem says that the moon’s face is like",choice1_q2:"A clock",choice2_q2:"Cheese",choice3_q2:"A person's face",answer_q2:"A clock",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        8:{source:"framingham", source_url:"https://docs.google.com/document/d/19ySFD7FLJ-1zn6XR0DuapULnF3xesD8CsNzpIfr6F_M/edit",pdf_corpus1:"HowTo/Topic",pdf_corpus2:"",passage1:"Did you know you can make your own dish soap right at home without having to go to the store? Directions:  you can make your own liquid dish soap in just a few easy steps.  Use a bar of soap that is made from natural ingredients.  Take a vegetable peeler, like the one your mom or dad, or even you might use to peel potatoes.  Peel the soap into a small saucepan on the top of your stove.",passage2:"When done peeling the soap into the small saucepan, heat the soap pieces on low heat for about two hours.  After two hours, remove the saucepan from the stove, turn off the stove and let the mixture cool down.  When it is cool, just pour it into a tupperware container, or bowl.  Now you are ready to use your homemade soap to wash your dishes. Amazing.",passage3:"",passage4:"",question1:"In order to make your own soap, just use a vegetable peeler and peel it into a",choice1_q1:"Saucepan",choice2_q1:"Paper bag",choice3_q1:"Bottle",answer_q1:"Saucepan",question2:"When the soap is melted remove it from the stove and",choice1_q2:"Put it in the refrigerator",choice2_q2:"Let it cool down",choice3_q2:"Put it in the freezer",answer_q2:"Let it cool down",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        9:{source:"framingham", source_url:"https://docs.google.com/document/d/19ySFD7FLJ-1zn6XR0DuapULnF3xesD8CsNzpIfr6F_M/edit",pdf_corpus1:"Nature",pdf_corpus2:"",passage1:"The deer took a good, long look at himself in the water of the lake. “My, how handsome my antlers are,” he thought. “They are so long, and curved and wide.” But then he noticed his thin, stick like legs he was not so happy. In fact he thought that his legs were very ugly. While the deer was looking in the water, a lion was secretly watching him. The lion thought that the deer looked nice and tasty. “Just right for dinner,” the lion thought to herself.",passage2:"When the deer saw the lion, the deer ran very fast. But the deer’s antlers got caught in the branches of a tree. Just as the lion was about to jump on the deer, the deer got his antlers free and ran like the wind. Safe at last, the deer said to himself, “how silly I was. I thought my antlers were so handsome and wonderful, but they almost got me eaten by the lion. And my legs, which I thought were so ugly, saved my life.”",passage3:"",passage4:"",question1:"The deer looked at himself in",choice1_q1:"A mirror",choice2_q1:"A window",choice3_q1:"The water",answer_q1:"The water",question2:"The lesson of this story is",choice1_q2:"Lions don’t know how to catch a deer",choice2_q2:"Looks are not always the most important thing",choice3_q2:"Everyone should have thin legs",answer_q2:"Looks are not always the most important thing",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        10:{source:"framingham", source_url:"https://docs.google.com/document/d/1X6BqOO0y0MnR1YNmE-RUMboCfXsfso_zA6lbQv4Hr0s/edit",pdf_corpus1:"HowTo/Topic",pdf_corpus2:"",passage1:"If you have ever been camping, then you might have made a roaring campfire to cook on or to stay warm. The right way to put out a fire is to sprinkle it with water. Splash the water on the fire with your hand. Don’t pour water on the fire. A solid stream of water sometimes leaves a small part of the fire hot and still burning. Next, take a stick and stir the embers or hot parts of the fire around.",passage2:"Then sprinkle the fire again with water, making sure to get all parts of the area that is hot and was burning. Before you leave the fire, you should check it one more time by putting your hand over the ashes. After the wet ashes have cooled off, you should bury them in the dirt. If you have to put out a fire and don’t have any water, you can just use plain sand, dirt, or soil to put out the fire.",passage3:"",passage4:"",question1:"Do not pour a steady stream of water on the fire because this",choice1_q1:"May leave some ashes still burning or hot",choice2_q1:"Creates a lot steam",choice3_q1:"Can cause hot embers to get out",answer_q1:"May leave some ashes still burning or hot",question2:"After you first sprinkle water on the fire, you should",choice1_q2:"Touch it",choice2_q2:"Sprinkle water again",choice3_q2:"Wait",answer_q2:"Sprinkle water again",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        11:{source:"framingham", source_url:"https://docs.google.com/document/d/1X6BqOO0y0MnR1YNmE-RUMboCfXsfso_zA6lbQv4Hr0s/edit",pdf_corpus1:"Nature",pdf_corpus2:"",passage1:"Just about everybody has heard the crash, bang, and boom of a lightning storm. Sometimes it sounds far away, and sometimes it sounds like it’s right over your head. Have you wondered how far away it really is? Sound travels about one mile in five seconds. That’s pretty fast. Light travels much more quickly than sound.",passage2:"When you see a flash of lightning during a storm, begin to slowly count, saying one-one thousand, two-one thousand, and so on. Keep counting until you hear the thunder that goes with the lightning strike. If you reached five, the lightning and the storm are one mile away. If you reached ten, they are two miles away.",passage3:"",passage4:"",question1:"The passage tells you how to",choice1_q1:"Keep safe during a storm",choice2_q1:"Look at lighting",choice3_q1:"Figure out how far away the storm really is",answer_q1:"Figure out how far away the storm really is",question2:"If you count to ten means that the lightning and storm are",choice1_q2:"Right over your head",choice2_q2:"Two miles away",choice3_q2:"One mile away",answer_q2:"Two miles away",question3:"Two miles away",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        12:{source:"framingham", source_url:"https://docs.google.com/document/d/1X6BqOO0y0MnR1YNmE-RUMboCfXsfso_zA6lbQv4Hr0s/edit",pdf_corpus1:"HowTo/Topic",pdf_corpus2:"",passage1:"Have you ever watched people dive into a pool? There are all kinds of different types of dives. One dive is called a swan dive. The swan dive can be beautiful if it is done right. The swan dive is an up-and-out, gliding kind of a dive. Just after reaching the high point of your dive, try to put your body in a birdlike position. Put your arms out sideways with the palms of your hands facing down. ",passage2:"Arch your back slightly and then tilt your head back. You will look and feel like a bird diving into the water. Stay in this position for almost the entire dive. Then just a split second before you enter the water, quickly bring your arms forward in front of your head. It’s important to finish the dive right, so make sure to keep your legs straight, closed, and stiff.",passage3:"",passage4:"",question1:"During most of the dive, your arms should be",choice1_q1:"By your side",choice2_q1:"Folded at your chest",choice3_q1:"Forward in front of your head",answer_q1:"By your side",question2:"Just before you enter the water, bring your arms",choice1_q2:"Forward in front of your head",choice2_q2:"To your chin",choice3_q2:"By your side",answer_q2:"Forward in front of your head",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        13:{source:"framingham", source_url:"https://docs.google.com/document/d/1X6BqOO0y0MnR1YNmE-RUMboCfXsfso_zA6lbQv4Hr0s/edit",pdf_corpus1:"HowTo/Topic",pdf_corpus2:"",passage1:"Everyone knows that swimming is a ton more fun when you follow the rules of water safety. First, learn how to swim. You can learn how to swim from a family member like a parent or brother or sister. You can also take swimming lessons from someone who knows how to swim. Kind of like going to school, but it’s a swimming school. No matter where you choose to swim, either a lake, pool or the ocean you should always make sure that there is a lifeguard around.",passage2:"It’s not a good idea to swim in a lake, pond, pool, or the ocean if there is not a lifeguard nearby. Always try to swim with a buddy or a friend. Keep your eye on your buddy or friend and make sure they keep an eye out for you. That way you’re both watching one another. Finally, when you are learning how to swim, stay in the shallow water whenever possible.",passage3:"",passage4:"",question1:"When swimming with another person or buddy always keep your eyes on your ",choice1_q1:"Cell phone",choice2_q1:"Water",choice3_q1:"Buddy",answer_q1:"Buddy",question2:"These directions were written to teach you how to",choice1_q2:"Choose a swimming buddy        ",choice2_q2:"Be safe in the water",choice3_q2:"Swim",answer_q2:"Be safe in the water",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        14:{source:"framingham", source_url:"https://docs.google.com/document/d/1X6BqOO0y0MnR1YNmE-RUMboCfXsfso_zA6lbQv4Hr0s/edit",pdf_corpus1:"HowTo/Topic",pdf_corpus2:"",passage1:"Have you ever had to lift a heavy box off of the floor? It can be very hard, and you could possibly hurt your back. Imagine that you have to pick up a really heavy box from the floor. Like just about anything you do, there is a correct way and a wrong way to do this. There is a correct way to lift heavy things from the floor without hurting yourself. First, bend your knees and squat down. Try to keep your back as straight as possible. ",passage2:"Try not to bend over from the waist as you are trying to pick up the heavy box. Bending from the waist puts a lot of pressure on your lower-back muscles. Try to get as close to the box as you can. To do this you just might have to spread your knees or even lower one knee. Keep the box close to your body. Once you have the box in your hands, just use the muscles in your legs to stand up straight.",passage3:"",passage4:"",question1:"When lifting things that are heavy it is important to",choice1_q1:"Keep the object close to your body",choice2_q1:"Bend your elbows properly",choice3_q1:"Use your knees",answer_q1:"Keep the object close to your body",question2:"Before you lift a heavy object like a box you may have to",choice1_q2:"Wash your hands",choice2_q2:"Lower one knee",choice3_q2:"Stretch",answer_q2:"Lower one knee",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        15:{source:"framingham", source_url:"https://docs.google.com/document/d/1X6BqOO0y0MnR1YNmE-RUMboCfXsfso_zA6lbQv4Hr0s/edit",pdf_corpus1:"HowTo/Topic",pdf_corpus2:"",passage1:"Have you had a time when you run the water in the bathtub, your bathroom sink, or the kitchen sink and the water just won’t go down the drain? Or it seems to take forever to go down the drain? Well, if you are having trouble with a blocked drain you may just be able to save some money by following these simple directions before you call for the plumber, who is trained to help people unblock their drains. ",passage2:"Go to the store and buy some baking soda and vinegar. Put a handful of baking soda down the blocked drain. After that add a half of a cup of the vinegar. Cover the drain tightly for about a minute. After a minute you might just be happy to learn that the drain is no longer blocked and works like a charm. The drain is no longer blocked.",passage3:"",passage4:"",question1:"The only two things you will need to clean your blocked drain are",choice1_q1:"Salt and pepper",choice2_q1:"Vinegar and baking soda",choice3_q1:"Plunger and pipe cleaner",answer_q1:"Vinegar and baking soda",question2:"You only need to cover the drain for",choice1_q2:"A day",choice2_q2:"A minute",choice3_q2:"30 minutes",answer_q2:"A minute",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        16:{source:"framingham", source_url:"https://docs.google.com/document/d/1X6BqOO0y0MnR1YNmE-RUMboCfXsfso_zA6lbQv4Hr0s/edit",pdf_corpus1:"HowTo/Topic",pdf_corpus2:"",passage1:"Believe it or not, there is a right way to do push-ups which make them easier to do. In order to do a push-up the right way, you should lie on the floor, face down. Keep your legs together. Put your hands on the floor beside your shoulders. Point your fingers straight ahead. After you do this, straighten your arms to push your body off the floor. ",passage2:"Your weight should be on your hands and toes. Try not to let your stomach sag so that it is close to the floor. Don’t arch your back like a cat does when it is mad. You have to try to keep your body straight. Lower your body until your chest is barely touching the floor. Finally, push yourself right up again without any delay or rest. Keep repeating the exercise until you are done.",passage3:"",passage4:"",question1:"When doing a push-up it is important to",choice1_q1:"Curl up",choice2_q1:"Keep your body straight",choice3_q1:"Use your hands",answer_q1:"Keep your body straight",question2:"Your weight should be on your",choice1_q2:"Hands and toes",choice2_q2:"Arms",choice3_q2:"Back",answer_q2:"Hands and toes",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""},
+        17:{source:"framingham", source_url:"https://docs.google.com/document/d/1X6BqOO0y0MnR1YNmE-RUMboCfXsfso_zA6lbQv4Hr0s/edit",pdf_corpus1:"HowTo/Topic",pdf_corpus2:"",passage1:"Here’s how to make the best tuna fish sandwich in the neighborhood, maybe the entire galaxy! Go to the grocery store and buy a 9 ounce can of tuna fish, celery, onions, pita bread, and mayonnaise or salad dressing. Using a spoon, spoon half the tuna in the can into a bowl. Get some celery and onions and chop them up with a knife. When done chopping the celery and onions mix them with mayonnaise or salad dressing in a large bowl.",passage2:"Cut the sides off two slices of the pita bread so that each piece has an open pocket. Toast the pita bread pockets until they are warm. Don’t over toast the pita pockets or you might burn them. Fill the pita pockets with the mixed up tuna. Eat one yourself to see how yummy it is and then give one to a friend. Pretty soon the entire neighborhood will be knocking at your door to eat your yummy tuna fish sandwiches.",passage3:"",passage4:"",question1:"You have to mix the tuna fish with",choice1_q1:"Mayonnaise or salad dressing, pickles, and onions",choice2_q1:"Mayonnaise or salad dressing, celery, and onions",choice3_q1:"Mayonnaise or salad dressing, cucumbers, and celery",answer_q1:"Mayonnaise or salad dressing, celery, and onions",question2:"Before you fill the pockets of your pita bread with the tuna mixture",choice1_q2:"Lightly toast the pita bread but don’t burn it",choice2_q2:"Warm it up in the microwave",choice3_q2:"Heat it up on a frying pan",answer_q2:"Lightly toast the pita bread but don’t burn it",question3:"",choice1_q3:"",choice2_q3:"",choice3_q3:"",answer_q3:""}
+    }
+
+    let text_choice_current = 18 //sw for safe keeping
+    let text_choices_lookup = shuffle(Object.keys(text_choices))
+    text_choices_lookup.splice(text_choices_lookup.indexOf("18"), 1)
+    text_choices_lookup.unshift("18")
+
+    let text_choices_preference = [
+        'Home at Mount Vernon the candles in the windows of George Washington’s home at Mount Vernon shone brightly on Christmas Eve. This Christmas Eve, though, was different. One month earlier the United States and Great Britain had signed a peace treaty ending the Revolutionary War. It was Christmastime when George Washington returned to his home. He was no longer the commander of the Continental Army. Soon after, at a dinner in New York, General Washington',
+        'said his goodbyes to his fellow officers. Later he presented Congress with his resignation as commander in chief of the Continental Army. His work was done, he told the Congress. He was retiring from public life forever—from the army, from government, from all the duties that America had called on him to do. Washington set an example for laying down his sword and surrendering his military authority to the people and the republic that represented them.',
+        'He had done something no one else in history had done. King George III said that if he did that, “He would be the greatest man in the world.” Americans called Washington the “Father of His Country.” They had a great deal of respect for their general. Some called him “Cincinnatus,” after the legendary Roman general. Cincinnatus was given power by the Roman republic and then surrendered it. This was perhaps George Washington’s greatest contribution',
+        'to the founding of America. Now, after nearly nine years of service to his country, Washington was free to return to his beloved Mount Vernon. As he rode up the circular drive to Mount Vernon that Christmas Eve, his wife, Martha, waited in the doorway to welcome him. At last, America’s hero was home. When Washington told Congress he was leaving public life forever, he meant it. Have you ever noticed, though, how sometimes things',
+        'happen that make you take back words like forever, never, and always? That is what happened to George Washington. First, Virginia asked him to serve as one of the state’s delegates to the Constitutional Convention in Philadelphia. How could Washington say no? He had fought to give life to the young nation. But for the last four years, he could only watch helplessly as it struggled under the Articles of Confederation. He could not turn',
+        'his back on his country. He had to take back that forever. He had to serve. Then, the delegates to the Constitutional Convention gathered in Philadelphia in 1787. They needed a strong, steady leader to get them through the hard work ahead. They turned to George Washington to serve as chairman of the convention. Again, Washington agreed to serve. As expected, he was everyone’s choice to be the nation’s first president. Once again, he knew',
+        'he could not say no. Forever would have to wait. He would serve the republic again to make sure the new nation got off to a good start. On April 16, Washington said goodbye to Mount Vernon once again and set out for New York, the nation’s temporary capital. There his inauguration would take place. An inauguration is a formal ceremony at the start of a term of office. The trip from Mount Vernon to',
+        'New York City took far longer than Washington expected. In every village and town he traveled through, he had to attend speeches, parades, and dinners in his honor. Citizens lined the streets to cheer as his carriage passed by. On the country roads, men on horseback rode in front of, behind, and alongside Washington’s carriage. The traffic filled the country air with dust as the journey became one long parade. After eight days, Washington finally arrived',
+        'in New York. Inauguration Day—April 30, 1789—dawned bright and sunny in New York City. A crowd of thousands assembled in front of the building known as Federal Hall. Shortly after noon, George Washington and a small group of officials stepped out on the balcony. Placing his hand on a Bible, Washington repeated the oath of office official to obey the law and fulfill the written in the new Constitution: “I do responsibilities of the office',
+        'of President of the United States, and will to the best of my ability, preserve, protect, and defend the Constitution of the United States.” Because there were no loudspeakers in 1789, few people on the street below could hear the words. Nevertheless, they knew they had witnessed a historic moment. After Washington spoke the final words of the oath, an official called out, “Long live George Washington, President of the United States!” The crowd cheered wildly.'
+    ]
+
+    /////// WINDOW LOAD
+    window.onload = function() {
+        onmousemove = function(e) {
+            save_xy_to_db(e.clientX, e.clientY,document.getElementById('reading').mouseIsOver, document.getElementById('reading_speed').mouseIsOver)
+        }
+        
+        user_type = window.location.search.split('?')[1]
+
+        forceScreenSize()
+        
+        // monitors if mouse is over text
+        initParMouseOver('reading')
+        initParMouseOver('reading_speed')
+
+        // pop data structures
+        pop_rounds()
+
+        // last step, start study
+        new_study_step()
+    }
+
+    function initParMouseOver(parName) {
+        let p = document.getElementById(parName)
+        p.mouseIsOver = false
+        p.onmouseover = function() {
+            this.mouseIsOver = true
+        }
+        p.onmouseout = function() {
+            this.mouseIsOver = false
+        }
+    }
+
+    /////// EXECUTE STUDY DESIGN
+    function new_study_step() {
+        // reset global study design variables
+        try { step_block_prev = study_steps[step_i].block } catch (error) { step_block_prev = '' }
+        step_i++
+        step_label = study_steps[step_i].step
+        step_part  = study_steps[step_i].part
+        step_block = study_steps[step_i].block
+        step_round = study_steps[step_i].round
+        step_iteration = study_steps[step_i].iteration
+
+        radio_current_questions = {}
+
+        if(step_label.includes('survey')) {
+            document.getElementById('progress_title').innerHTML = 'Progress for Survey'
+            document.getElementById('progress').max   = 1
+            document.getElementById('progress').value = 1
+        } else if(step_round === 0) {
+            document.getElementById('progress_title').innerHTML = 'Progress for Warm-up Round'
+            document.getElementById('progress').max   = (study_round_min_max[step_round].max - study_round_min_max[step_round].min)
+            document.getElementById('progress').value = (step_i - study_round_min_max[step_round].min)
+        } else if(step_round === 1) {
+            document.getElementById('progress_title').innerHTML = 'Progress for Font Preference Test'
+            document.getElementById('progress').max   = (study_round_min_max[step_round].max - study_round_min_max[step_round].min)
+            document.getElementById('progress').value = (step_i - study_round_min_max[step_round].min)
+        } else {
+            document.getElementById('progress_title').innerHTML = 'Progress for Reading Round ' + (step_round - 1) + ' of 10'
+            document.getElementById('progress').max   = (study_round_min_max[step_round].max - study_round_min_max[step_round].min)
+            document.getElementById('progress').value = (step_i - study_round_min_max[step_round].min)
+        }
+
+        // log('\ncurrent step block: ' + step_i + ', part = ' + step_part + ', block = ' + step_block)
+
+        // prep new ui
+        if (step_block === 'pre_survey') {
+            show_user_id('userid_pre')
+        } else if(step_block === 'instructions_overall') {
+            // nothing needed right now
+        } else if(step_block === 'instructions_preference') {
+            // nothing needed right now
+        } else if(step_block === 'preference') {
+            if(step_block_prev === 'instructions_preference') {
+                if(isTestingRound()) { // is testing phase?
+                    fonts_per_tournament = 4
+                    prep_new_preference_tournament(fonts_joke, fonts_per_tournament)
+                } else {
+                    fonts_per_tournament = 16
+                    prep_new_preference_tournament(fonts_available, fonts_per_tournament)
+                }
+            }
+            if(isValidationRound()) {
+                prepare_new_validation_pairwise_comparison()
+            } else {
+                prepare_new_pairwise_comparison()
+            }
+        } else if(step_block === 'preferred_font') {
+            // 
+            show_user_preferred_font()
+        } else if(step_block === 'instructions_reading') {
+            // nothing needed right now
+            if(study_steps[(step_i-1)].part === 'font_validation') {
+                document.getElementById('reading_pref_test_done').style.display = 'block'
+            } else {
+                document.getElementById('reading_pref_test_done').style.display = 'none'
+            }
+        } else if(step_block === 'speed') {
+            if(step_iteration === 1) {
+                // prep new documents
+                text_choice_current = text_choices_lookup.shift()
+            }
+            speed_pause = 0
+
+            if(isTestingRound()) {
+                font_reading = font_champ
+            } else {
+                i_temp = step_i - 1
+                if(study_steps[i_temp].block !== 'speed') {
+                    font_reading = fonts_to_read.shift()
+                }
+            }
+
+            log('font to read in will be : ' + font_reading + ',  font champ is = ' + font_champ + ', remaing fonts = ' + fonts_to_read)
+
+            passage_lookup = 'passage' + step_iteration
+            passage_speed_current = text_choices[text_choice_current][passage_lookup]
+            document.getElementById('reading_speed').innerHTML = convert_text_to_spans(passage_speed_current)
+            document.getElementById('reading_speed').className = reading_class + ' ' + font_reading
+
+            // check if it is the last speed block
+            next_step = step_i + 1
+            if(study_steps[next_step].block === 'speed') {
+                document.getElementById('speed_btn_prompt').innerHTML = '<i class="fas fa-book-reader icon-spacer"></i>Proceed to next reading section...'
+            } else {
+                document.getElementById('speed_btn_prompt').innerHTML = '<i class="fas fa-book-reader icon-spacer"></i>Proceed to next step...'
+            }
+
+            speed_start = performance.now()
+
+            // disable proceed button for a few seconds to prevent accidental clicks
+            disableProceedSpeed()
+        } else if(step_block === 'comprehension') {
+            uncheck_radio_btns('q1')
+            uncheck_radio_btns('q2')
+            // uncheck_radio_btns('q3')
+
+            psg = text_choices[text_choice_current]
+            radio_current_questions['q1'] = {question:psg.question1, answer:'', correct:psg.answer_q1, passage:text_choices_lookup}
+            radio_current_questions['q2'] = {question:psg.question2, answer:'', correct:psg.answer_q2, passage:text_choices_lookup}
+            // radio_current_questions['q3'] = {question:psg.question3, answer:'', correct:psg.answer_q3, passage:text_choices_lookup}
+            // set questions
+            set_radio_questions('q1_question', 'q1', psg.question1, psg.choice1_q1, psg.choice2_q1, psg.choice3_q1)
+            set_radio_questions('q2_question', 'q2', psg.question2, psg.choice1_q2, psg.choice2_q2, psg.choice3_q2)
+            // set_radio_questions('q3_question', 'q3', psg.question3, psg.choice1_q3, psg.choice2_q3, psg.choice3_q3)
+            // enable proceed button
+            document.getElementById('proceed_comprehension').disabled = true
+            document.getElementById('proceed_comprehension').innerHTML = proceed_questions_disabled_text
+        } else if(step_block === 'mini_questions') {
+            uncheck_radio_btns('familiarity_questions')
+            uncheck_radio_btns('interest_questions')
+            //uncheck_radio_btns('reading_questions')
+
+            radio_current_questions['familiarity_questions'] = {question:'familiarity_with_passage', answer:'', correct:'na', passage:text_choices_lookup}
+            radio_current_questions['interest_questions']    = {question:'interest_in_passage', answer:'', correct:'na', passage:text_choices_lookup}
+            //radio_current_questions['reading_questions']     = {question:'reread_passage', answer:'', correct:'na', passage:text_choices_lookup}
+            document.getElementById('proceed_mini_questions').disabled = true
+            document.getElementById('proceed_mini_questions').innerHTML = proceed_questions_disabled_text
+        } else if(step_block === 'font_familiarity') {
+            ff_html = `<p id="prompt" class="prompt">Questions - Font </p><p>Before this study how recognizable was text in the following fonts?</p>`
+            ff_html += gen_font_familiarity_questions()
+            ff_html += "<hr style='width:480px'>"
+            ff_html += "<button id='proceed_font_familiarity' class='choice row button is-large' onclick='proceed_font_familiarity()' disabled><span class='icon'></span><i class='far fa-arrow-right icon-spacer'></i>Please answer the questions above</span></button>"
+            document.getElementById('font_familiarity').innerHTML = ff_html
+        } else if(step_block === 'post_survey') {
+            document.getElementById('prompt_preferred_font_post_survey').className = font_champ
+            document.getElementById('prompt_preferred_font_post_survey').innerHTML = 'Your preferred font is: ' + fonts[font_champ].font
+            show_user_id('userid_post')
+        } else {
+            alert('Oh no! :(  Sorry something appeared to go wrong with the preference test. (wrong study step)')
+        }
+        
+        // deactivate/activate UI
+        if(step_i > 1) {
+            update_ui(step_block_prev, 'none')
+        }
+        update_ui(step_block, 'block')
+    }
+
+    // for delaying the proceed reading button, to prevent accidental clicks
+    const delay = ms => new Promise(res => setTimeout(res, ms))
+    const disableProceedSpeed = async () => {
+        document.getElementById('proceed_reading').disabled = true
+        await delay(2000);
+        //log("Waited 5s")
+        document.getElementById('proceed_reading').disabled = false
+    };
+
+    function update_ui(block, display) {
+        document.getElementById(block).style.display = display
+    }
+
+    function show_user_id(id) {
+        document.getElementById(id).style.display = 'block'
+        tag = '_' + user_type + '_c0913_1212_'
+        beg = '<b>Unique ID:</b> happy' + tag
+        if(id === 'userid_post') { 
+            beg = 'smile' + tag 
+        } else if (id === 'userid_mturk') {
+            beg = '<b>Mechanical Turk Survey Code:</b> laugh' + tag 
+        } 
+        document.getElementById(id).innerHTML =  beg + id_user
+    }
+           
+    function pre_survey_code_change() {
+        if(document.getElementById('pre_survey_code').value === 'readingRhino') {
+            document.getElementById('pre_survey_proceed').disabled = false
+        }
+    }
+
+    function post_survey_code_change() {
+        if(document.getElementById('post_survey_code').value === 'readingRabbit') {
+            document.getElementById('post_survey_proceed').disabled = false
+        }
+    }
+
+    /////// STUDY STEPS
+    
+    function pop_rounds() {
+        round_prev = -1
+        study_round_min_max[round_prev] = {min:0,max:0}
+        Object.keys(study_steps).forEach(i => {
+            step = study_steps[i]
+            if(round_prev < step.round) {
+                study_round_min_max[step.round] = {min:i,max:0}
+                if(step.round !== round_prev) {
+                    study_round_min_max[round_prev].max = (i-1)
+                }
+            }
+            round_prev = step.round
+            i++
+        });
+    }
+
+    /////// data structures for preference tournament
+    //does not get reset for new tourney
+
+    //resest on new tourney
+    let matchup = 0 
+    let round   = 0
+    let winners = [] 
+    let losers  = []
+    let winners_new = []
+    let losers_new  = [] 
+    let eliminated  = []
+    let bracket = 'winners'
+    let records = {}
+
+    function prep_new_preference_tournament(fonts_to_test, num_of_fonts) {
+        fonts_to_test = shuffle(fonts_to_test.slice(0))
+        winners = fonts_to_test.splice(0,num_of_fonts)
+        matchups = []
+        matchup = 0
+        round   = 0
+        losers      = []
+        winners_new = []
+        losers_new  = []
+        eliminated  = []
+        bracket = 'winners'
+
+        records = populate_records(winners) // every font starts in the winners bracket
+        
+        return winners
+    }
+
+    function populate_records(font_choices_for_tournament) {
+        wl = {}
+        font_choices_for_tournament.forEach(ele => {
+            wl[ele] = {w:0,l:0}
+        })
+        return wl
+    }
+
+    function forceScreenSize() {
+        document.body.style.zoom = (window.innerWidth / window.outerWidth)
+        //log(window.innerWidth / window.outerWidth)
+    }
+
+    function toggleClick() {
+        //log('toggleClick: id_user = ' + id_user)
+        compute_dwell_time(a_active)
+
+        if (a_active) { // if a was active
+            views_b += 1
+            document.getElementById('reading').className = reading_class + font_b
+            font_reading = font_b
+            a_active = false
+        } else {
+            views_a += 1
+            document.getElementById('reading').className = reading_class + font_a
+            font_reading = font_a
+            a_active = true
+        }
+
+        // check if b has been viewed to enable UI for font choice
+        if (views_b >= 1) {
+            document.getElementById('choice').disabled = false
+            document.getElementById('choice').innerHTML = choice_enabled_text
+        } else {
+            document.getElementById('choice').disabled = true
+            document.getElementById('choice').innerHTML = choice_disabled_text
+        }
+    }
+
+    function choiceClick() {
+        compute_dwell_time(a_active)
+        
+        let winning_font = font_b
+        let losing_font  = font_a
+        if (a_active) { // a active
+            // a won!
+            winning_font = font_a
+            losing_font  = font_b
+        }
+
+        matchups.push([winning_font,losing_font])
+        records[winning_font].w += 1
+        records[losing_font].l  += 1        
+        log(step_iteration + ' - w: ' + winning_font + ' = ' + records[winning_font].w + ' loser: ' + losing_font + ' = ' + records[losing_font].l + '; (step_label ' + step_label + ', step_part = ' + step_part + ')')
+
+        // add to temp data structures
+        update_winners_losers_new(winning_font, losing_font)
+        /* sw - for study 4 */
+        if(step_part === 'font_competition') {
+            font_champ = winning_font // since the last picked font in a pref test will always be the champ
+        }
+
+        save_matchup_to_db(winning_font)
+
+        //check if only 1 possibility is left; therefore it is the winner :)
+        if((winners.length + losers.length + winners_new.length + losers_new.length === 1)) {
+            save_fontchamp_to_db(winning_font)
+            log('\n FONT CHAMP ::: adding to CHAMPS: ' + winning_font)
+            if(!fonts_champions.includes(winning_font)) {
+                fonts_champions.push(winning_font)   
+            }
+
+            if(!isTestingRound()) {
+                // prep fonts to read in
+                fonts_temp = shuffle(Object.keys(fonts))
+                //fonts_temp.splice(fonts_temp.indexOf('times'), 1)
+                //fonts_temp.splice(fonts_temp.indexOf('noto_sans'), 1)
+                fonts_temp.splice(fonts_temp.indexOf(font_champ), 1)
+                
+                if(font_champ === 'times' || font_champ === 'noto_sans') {
+                    fonts_to_read = fonts_temp.splice(0,3)
+                } else {
+                    fonts_to_read = fonts_temp.splice(0,2)
+                    fonts_to_read.push(font_champ)
+                }
+
+                fonts_to_read.push('times')
+                fonts_to_read.push('noto_sans')
+                fonts_to_read = fonts_to_read.concat(shuffle(fonts_to_read))
+                fonts_to_read = shuffle(fonts_to_read)
+            }
+
+            // in case font champ was chosen early, skip next step
+            if(step_iteration === 30 || (step_iteration === 6 && isTestingRound())) {
+                step_i++
+            }
+        }
+        new_study_step()
+    }
+
+    function update_winners_losers_new(winning_font, losing_font) {
+        // add to temp data structures
+        if(bracket === 'winners') {
+            winners_new.push(winning_font)
+        } else {
+            losers_new.push(winning_font)
+        }
+
+        if(records[losing_font].l >= 2) {
+            eliminated.push(losing_font)
+            fonts_eliminated.push(losing_font)
+            //log('*** eliminated = ' + losing_font)
+        } else {
+            losers_new.push(losing_font)
+        }
+    }
+
+    function is_font_eliminated(font) {
+        return eliminated.includes(font)
+    }
+
+    function prepare_new_validation_pairwise_comparison() {
+        //reset ui
+        preference_test_reset_ui()
+        matchups = shuffle(matchups)
+        bracket = 'validation'
+        pair = matchups.shift()
+        font_a = pair[0]
+        font_b = pair[1]
+        preference_test_reset_ui_new_fonts()
+    }
+
+    function show_user_preferred_font() {
+        // so the fun facts are displayed in the winning font
+        document.getElementById('prompt_preferred_font').className = 'prompt ' + font_champ
+        document.getElementById('reading_preferred_font').className = 'reading ' + font_champ
+        document.getElementById('prompt_preferred_font').innerHTML = 'Your preferred font is: ' + fonts[font_champ].font
+        document.getElementById('reading_preferred_font').innerHTML =  'Did you know ' + fonts[font_champ].font + ' ' + fonts[font_champ].fact + show_user_wpm()
+    }
+
+    function show_user_wpm() {
+        //if testing
+        best_wpm = most_effective_font()
+        pref_wpm = get_wpm(font_champ)
+
+        if(best_wpm[0] === font_champ) {
+            return '<br><br>You read the fastest in your preferred font, at ' + pref_wpm + ' words per minute.'
+        } else {
+            return '<br><br>You read the fastest in the font <b>' + fonts[best_wpm[0]].font + '</b>, at ' + best_wpm[1] + ' words per minute. '
+                    + '<br><br>You read in your preferred font <b>' + fonts[font_champ].font + '</b>, at ' + pref_wpm + ' words per minute.'
+        }
+    }
+
+    function prepare_new_pairwise_comparison() {
+        log('\n### NEW COMPARISON - w: ' + winners.length + ' l: ' + losers.length + ' wn: ' + winners_new.length + ' ln: ' + losers_new.length)
+
+        //reset ui
+        preference_test_reset_ui()
+
+        if(winners.length + losers.length + winners_new.length + losers_new.length === 2) {
+            // CHAMPIONSHIP
+            bracket = 'final'
+            finals = shuffle(winners.concat(losers.concat(winners_new.concat(losers_new))))
+            font_a = finals.shift()
+            font_b = finals.shift()
+            matchup++
+            //reset old brackets
+            winners = []
+            losers = []
+            winners_new = []
+            losers_new = []
+        } else if (losers.length >= 2) {
+            bracket = 'losers'
+            font_a = losers.shift()
+            font_b = losers.shift()
+            matchup++
+        } else if(winners.length >= 2) {
+            bracket = 'winners'
+            font_a = winners.shift()
+            font_b = winners.shift()
+            matchup++
+        } else if((winners.length + losers.length) <= 1 && (winners_new.length + losers_new.length) > 0) {
+            //SEED NEW ROUND
+            log('\nSeed New Round:')
+            round += 1
+            winners     = shuffle(winners.concat(winners_new))
+            losers      = shuffle(losers.concat(losers_new))
+            winners_new = []
+            losers_new  = []
+            prepare_new_pairwise_comparison()
+            //new_study_step()
+            log(winners)
+            log(losers)
+        } else {
+            // OH NO SOMETHING WENT WRONG :(
+            alert('Oh no, something went wrong with the preference test. :(')
+            log('Something went wrong with the preference test. :(')
+        }
+
+        // reset UI w/ new fonts 
+        preference_test_reset_ui_new_fonts()
+        //log('round: ' + round + ' ' + bracket + ' matchup: ' + matchup + ' ' + font_a + ' vs ' + font_b)
+    }
+
+    function preference_test_reset_ui() {
+        a_active = true
+        dwell_time_a = 0
+        dwell_time_b = 0
+        dwell_a_pause = 0
+        dwell_b_pause = 0
+        views_a = 1
+        views_b = 0
+        text_choice = text_choices_preference[(matchup % 10)]
+        document.getElementById('reading').innerHTML = convert_text_to_spans(text_choice)
+        document.getElementById('choice').disabled = true
+        document.getElementById('choice').innerHTML = choice_disabled_text
+    }
+
+    function preference_test_reset_ui_new_fonts() {
+        document.getElementById('reading').className = reading_class + font_a
+        font_reading = font_a
+        dwell_start = performance.now()
+    }
+
+    function compute_dwell_time(a_last_font_active) {
+        dwell_end = performance.now()
+        dwell_time = (dwell_end - dwell_start)
+        //log(dwell_time)
+        if(a_last_font_active) {
+            dwell_time_a += dwell_time
+        } else {
+            dwell_time_b += dwell_time
+        }
+    }
+
+    let speed_start
+    function new_speed_test() {
+        speed_end = performance.now()
+        seconds = ((performance.now() - speed_start)-speed_pause) / 1000
+        
+        // save to db
+        save_speed_to_db(speed_start, speed_end, seconds)
+
+        new_study_step()
+    }
+
+    function convert_text_to_spans(text) {
+        spans = ''
+        let id
+        let words = text.split(' ')
+        for(id = 0; id < words.length; id++) {
+            w = words[id]
+            spans +=
+            "<span "
+            + " onmouseover=\"(mouse_word(event,['over','" + id + "','" + w + "']))\""
+            + " onmousemove=\"(mouse_word(event,['move','" + id + "','" + w + "']))\"" 
+            + " onmouseout=\"(mouse_word(event, ['out','"  + id + "','" + w + "']))\""
+            + ">" + w + "</span> "
+        }
+
+        /*
+        text.split(' ').forEach(w => { // w = word
+            spans +=
+            "<span "
+            + " onmouseover=\"(mouse_word(event,['over','" + id + "','" + w + "']))\""
+            + " onmousemove=\"(mouse_word(event,['move','" + id + "','" + w + "']))\"" 
+            + " onmouseout=\"(mouse_word(event, ['out','"  + id + "','" + w + "']))\""
+            + ">" + w + "</span> "
+            id++
+        });
+        */
+
+        return spans
+    }
+
+    function mouse_word(e, data) { // data is an array
+        //log(data[0] + ' ' + data[1] + ' ' + e.clientX  + ' ' + e.clientY + ' ' + Date.now())
+        mouse_event = data[0]
+        id_word = data[1]
+        word = data[2]
+        save_xyword_to_db(mouse_event, id_word, word, e.clientX, e.clientY)
+    }
+
+    let pause_time = 0
+    function openHelpModal() {
+        // start accumulating pause time
+        pause_time = performance.now()
+        
+        // get HTML
+        if(step_block === 'preference') {
+            help_text = "In this font preference test, you will be asked to choose your preference amongst several font pairings by toggling between choices and then selecting your preferred font."
+                        + "<br><br>"
+                        + "<b>You do not need to read the text passages during the font preference toggle test.</b>"
+                        + "<br><br>"
+                        + "You will be required to view each font at least once before you can select your preference."
+        } else { // speed
+            help_text = "In the reading section, read the text passage and then click the button starting with the work proceed."
+                        + "<br><br>"
+                        + "<b>Please read the entire passage at your normal speed, and do not read aloud.</b>"
+        }
+        // reset ui
+        document.getElementById('modal-card-body').innerHTML = help_text
+        document.getElementById('modal').className = 'modal is-active'
+    }
+
+    function closeHelpModal() {
+        // stop 
+        pause_time = performance.now() - pause_time
+        if(step_block === 'preference') {
+            if(a_active) {
+                dwell_a_pause += pause_time
+            } else {
+                dwell_a_pause += pause_time
+            }
+        } else if(step_block === 'speed') {
+            speed_pause += pause_time
+        } else {
+            alert('Oh no something unexpected happened. Please proceed as normal, the system has recovered.')
+        }
+
+        // reset ui
+        document.getElementById('modal').className = 'modal'
+    }
+
+    /////// RADIO BUTTON QUESTIONS
+    let radio_current_questions = {}
+
+    function proceed_comprehension_next() {
+        // save to db
+        Object.keys(radio_current_questions).forEach(n => {
+            //console.log('comp questions: ', radio_current_questions[n].answer, radio_current_questions[n].correct)
+            correct = 0
+            if(radio_current_questions[n].answer === radio_current_questions[n].correct) {
+                correct = 1
+            }
+            save_comprehension_to_db(radio_current_questions[n].question, radio_current_questions[n].answer, correct)
+        });
+
+        // reset ui
+        new_study_step()
+    } 
+    
+    function proceed_mini_questions_next() {
+        // save to db
+        Object.keys(radio_current_questions).forEach(n => {
+            save_miniq_to_db(radio_current_questions[n].question, radio_current_questions[n].answer, get_answer_num(radio_current_questions[n].answer))
+        });
+        new_study_step()
+    } 
+    
+    function radioSel(radioName, proceedBtn) {
+        //log('radioSel: ' + radioName + ' :: ' + proceedBtn)
+        radio_current_questions[radioName].answer = getRadioChecked(radioName)
+        
+        enableBtn = true
+        Object.keys(radio_current_questions).forEach(k => {
+            if(radio_current_questions[k].answer === "") {
+                enableBtn = false
+            }
+        });
+        if(enableBtn) {
+            document.getElementById(proceedBtn).disabled = false
+            document.getElementById(proceedBtn).innerHTML = proceed_questions_enabled_text
+        }
+    }
+
+    function set_radio_questions(question_prompt, radio_q, question, choice1, choice2, choice3) {
+        document.getElementById(question_prompt).innerHTML = question
+        document.getElementById(radio_q + '_1').value = choice1
+        document.getElementById(radio_q + '_2').value = choice2
+        document.getElementById(radio_q + '_3').value = choice3
+        document.getElementById(radio_q + '_1_text').innerHTML = choice1
+        document.getElementById(radio_q + '_2_text').innerHTML = choice2
+        document.getElementById(radio_q + '_3_text').innerHTML = choice3
+    }
+
+    function get_answer_num(answer) {
+        if (answer === 'not_at_all') { 
+            return 1
+        } else if (answer === 'slightly') {
+            return 2
+        } else if (answer === 'moderately') {
+            return 3
+        } else if (answer === 'very') {
+            return 4
+        } else if (answer === 'extremely') { // extremely
+            return 5
+        } else if (answer === 'no') {
+            return 0
+        } else if (answer === 'yes') {
+            return 1
+        } else {
+            return -1
+        }
+    }
+
+    function get_answer_num_fam(answer) {
+        if (answer === 'not_at_all') { 
+            return 1
+        } else if (answer === 'moderately') {
+            return 2
+        } else { // extremely
+            return 3
+        }
+    }
+
+    function complete_post_survey() {
+        document.getElementById('post_survey_1').style.display = 'none'
+        document.getElementById('progress_div').style.display = 'none'
+        document.getElementById('post_survey_2').style.display = 'block'
+        if(user_type.includes('mturk')) {
+            document.getElementById('mturk_msg').style.display = 'block'
+            show_user_id('userid_mturk')
+        }
+    }
+
+    function gen_font_familiarity_questions() {
+        // radioSel(radioName, proceedBtn)
+        new_html = ''
+        all_fonts = Object.keys(fonts).concat(Object.keys(fonts_joke))
+        all_fonts.forEach(f => {
+            if(fonts.hasOwnProperty(f)) {
+                fontName = fonts[f].font
+                fontClass = f
+            } else {
+                fontClass = fonts_joke[f]
+                fontName = fonts_joke_names[fontClass]
+            }
+            radio_current_questions[fontClass] = {question:fontClass, answer:'', correct:'na', passage:''}
+            
+            
+            new_html += `
+                <div>
+                    <p id="familiarity_questions" class="radio_question `    + fontClass + `">How recognizable was text with the font ` + fontName + `? <br>Here is some fun text to read in the above font to help you better assess if you recognize text in the following font.</p>
+                    <input id="font1" type="radio" class="radio_btn" name="` + fontClass  + `" value="not_at_all" onchange="radioSel('` + fontClass + `', 'proceed_font_familiarity')"><span id="font1_text">Not at all</span><br>
+                    <input id="font2" type="radio" class="radio_btn" name="` + fontClass  + `" value="moderately"  onchange="radioSel('` + fontClass + `', 'proceed_font_familiarity')"><span id="font2_text">Moderately</span><br>
+                    <input id="font3" type="radio" class="radio_btn" name="` + fontClass  + `" value="extremely"  onchange="radioSel('` + fontClass + `', 'proceed_font_familiarity')"><span id="font3_text">Extremely</span><br>
+                </div>
+                <hr style="width: 480px; margin: 1em;">
+            `
+        });
+        return new_html
+    }
+
+    function proceed_font_familiarity() {
+        // save to db
+        Object.keys(radio_current_questions).forEach(f => {
+            save_fontfamiliarity_to_db(f, radio_current_questions[f].answer, get_answer_num_fam(radio_current_questions[f].answer))
+        });
+        new_study_step()
+    }
+
+    function timerStop() {
+        // store accumulated difference
+        
+    }
+
+    function timeStart() {
+        // start time
+    }
+
+    function newTimer() {
+        // reset accumulated difference
+    }
+
+    /////// UTIL FUNCTIONS
+    function get_device() {
+        info = new UAParser()
+        return info.getBrowser().name + '|*|' + info.getOS().name + '|*|' + info.getDevice().type
+    }
+
+    function getRadioChecked(name) {
+        is_checked = false
+        document.getElementsByName(name).forEach(ele => {
+            if (ele.checked) {
+                is_checked = ele.value
+            }
+        });
+        return is_checked // no value checked :/
+    }
+
+    function rand_num() {
+        return Math.floor(Math.random() * 1000)
+    }
+
+    function random_bool() {
+        if(Math.floor(Math.random() + (2 - 0) + 0) === 1) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    function remove_common_elements(array_to_keep, array_dupes) {
+        array_to_keep = array_to_keep.filter(function(val) {
+            return array_dupes.indexOf(val) == -1;
+        });
+        return array_to_keep
+    }
+    
+    function shuffle(array) {
+        var ele = array.length, t, i
+        // While there remain elements to shuffle…
+        while (ele) {
+            // Pick a remaining element…
+            i = Math.floor(Math.random() * ele--)
+            // And swap it with the current element.
+            t = array[ele]
+            array[ele] = array[i]
+            array[i] = t
+        }
+        return array
+    }
+
+    function most_effective_font() {
+        top_font = ''
+        top_wpm  = 0 
+        Object.keys(fonts_wpm).forEach(f => {
+            tot_wpm = get_wpm(f)
+            if(tot_wpm > top_wpm) {
+                top_font = f
+                top_wpm = tot_wpm
+            }
+        });
+        return [top_font,top_wpm]
+    }
+
+    function get_wpm(font_name) {
+        n = fonts_wpm[font_name].length
+        return Math.round(fonts_wpm[font_name].reduce((a,b) => a + b, 0) / n)
+    }
+
+    function isTestingRound() {
+        if(step_round === 0) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    function isFinalRound() {
+        if(step_label === 'final') {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    function isValidationRound() {
+        if(step_part === 'font_validation') {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    function uncheck_radio_btns(name) {
+        document.getElementsByName(name).forEach(ele => {
+            ele.checked = false
+        });
+    } 
+
+    function log(str) {
+        console.log(str)
+    }
+
+    /////// DATABASE FUNCTIONS
+    function get_id_user() {
+        try {
+            axios.get('/api/v1/newuser', {
+                params: {
+                    user_type: user_type,
+                    timestamp: Date.now() 
+                }
+            }).then(function(response){
+                id = response.data
+                id_user = id 
+            }).catch(function(error){
+                console.log('get_id_user' + error);
+            });
+        } catch (error) {
+            console.log('ERROR - get_id_user - ' + error)
+        }
+    }
+
+    function save_xy_to_db(x,y,reading_preference,reading_speed) {
+        try {
+            axios.post('/api/v1/trackxy', {
+                id_user:id_user,
+                block:step_block,
+                round:step_round,
+                iteration:step_iteration,
+                x:x,
+                y:y,
+                reading_preference:reading_preference, 
+                reading_speed:reading_speed,
+                study_step:step_label,
+                timestamp:Date.now()
+            }).then(function (response) {
+                //log('saveXY GOOD: ' + response)
+            }).catch(function (error) {
+                log('saveXY BAD: ' + error);
+            });  
+        } catch (error) {
+            log(error)
+        }
+    }
+
+    function save_xyword_to_db(mouse_event, id_word, word, x, y) {
+        try {
+            axios.post('/api/v1/xyword', {
+                id_user:id_user,
+                font:font_reading,
+                block:step_block,
+                mouse_event:mouse_event,
+                id_passage:text_choice_current,
+                id_word:id_word,
+                word:word,
+                x:x,
+                y:y,
+                study_step:step_label,
+                timestamp:Date.now()
+            }).then(function (response) {
+                //log('saveXY Word GOOD: ' + response)
+            }).catch(function (error) {
+                log('saveXY Word BAD: ' + error);
+            });  
+        } catch (error) {
+            log(error)
+        }
+    }
+
+    function count_words(val) {
+        return val.split(' ').length
+    }
+
+    function count_sentences(val) {
+        return val.split('.').length // could remove other things like mr.
+    }
+
+    function save_speed_to_db(speed_start, speed_end, seconds) {
+        wpm = Math.round((count_words(passage_speed_current) * 60) / seconds)
+        if(!fonts_joke.includes(font_reading)) {
+            if(fonts_wpm.hasOwnProperty(font_reading)) {
+                fonts_wpm[font_reading].push(wpm)
+            } else {
+                fonts_wpm[font_reading] = [wpm]
+            }
+        }
+
+        log('WPM font ' + font_reading + ' at ' + wpm)
+        
+        try {
+            axios.post('/api/v1/speed', {
+                id_user:id_user,
+                font:font_reading,
+                id_passage:text_choice_current,
+                iteration:step_iteration,
+                passage:passage_speed_current, 
+                words:count_words(passage_speed_current),
+                chars:passage_speed_current.length,
+                sentences:count_sentences(passage_speed_current),
+                wpm:wpm,
+                seconds:seconds,
+                study_step:step_label,
+                timestamp:Date.now()
+            }).then(function (response) {
+                //log('save speed GOOD: ' + response)
+            }).catch(function (error) {
+                log('save speed BAD: ' + error);
+            });  
+        } catch (error) {
+            log(error)
+        }
+    }
+
+    function save_comprehension_to_db(question,answer,correct) {
+        try {
+            axios.post('/api/v1/comprehension', {
+                id_user:id_user,
+                font:font_reading,
+                id_passage:text_choice_current, 
+                question:question, 
+                answer:answer,
+                correct:correct,
+                study_step:step_label,
+                timestamp:Date.now()
+            }).then(function (response) {
+                //log('save comprehension GOOD: ' + response)
+            }).catch(function (error) {
+                log('save comprehension BAD: ' + error);
+            });  
+        } catch (error) {
+            log(error)
+        }
+    }
+
+    function save_miniq_to_db(question,answer,answer_num) {
+        try {
+            axios.post('/api/v1/miniq', {
+                id_user:id_user,
+                font:font_reading,
+                id_passage:text_choice_current, 
+                question:question, 
+                answer:answer,
+                answer_num:answer_num,
+                study_step:step_label,
+                timestamp:Date.now()
+            }).then(function (response) {
+                //log('save miniq GOOD: ' + response)
+            }).catch(function (error) {
+                log('save miniq BAD: ' + error);
+            });  
+        } catch (error) {
+            log(error)
+        }
+    }
+
+    function save_fontfamiliarity_to_db(font,answer,answer_num) {
+        try {
+            axios.post('/api/v1/fontfamiliarity', {
+                id_user:id_user,
+                font:font,
+                answer:answer,
+                answer_num:answer_num,
+                timestamp:Date.now()
+            }).then(function (response) {
+                //log('save fontfamiliarity GOOD: ' + response)
+            }).catch(function (error) {
+                log('save fontfamiliarity BAD: ' + error);
+            });  
+        } catch (error) {
+            log(error)
+        }
+    }
+
+    function save_fontchamp_to_db(font) {
+        try {
+            axios.post('/api/v1/fontchamp', {
+                id_user:id_user,
+                font:font,
+                study_step:step_label,
+                timestamp:Date.now()
+            }).then(function (response) {
+                //log('save fontchamp GOOD: ' + response)
+            }).catch(function (error) {
+                log('save fontchamp BAD: ' + error);
+            });  
+        } catch (error) {
+            log(error)
+        }
+    }
+    
+    function save_matchup_to_db(winning_font) {
+        // font_a, font_b, winning_font, matchup, bracket, dwell_time_a, dwell_time_b, views_a, views_b, timestamp
+        /*
+        log('\n font_a: ' + font_a + '\n font_b: ' + font_b + '\n bracket: ' + bracket + '\n matchup: ' + matchup
+            + '\n winning_font: ' + winning_font + '\n dwell_time_a: ' + dwell_time_a + '\n dwell_time_b: ' + dwell_time_b
+            + '\n views_a: ' + views_a  + '\n views_b: ' + views_b)
+        */
+        
+        var width = window.innerWidth
+                    || document.documentElement.clientWidth
+                    || document.body.clientWidth;
+
+        var height = window.innerHeight
+                    || document.documentElement.clientHeight
+                    || document.body.clientHeight
+        
+        try {
+            axios.post('/api/v1/newchoice', {
+                id_user:id_user, 
+                font_a:font_a, 
+                font_b:font_b, 
+                winning_font:winning_font, 
+                matchup:matchup, 
+                bracket:bracket, 
+                dwell_time_a:(dwell_time_a-dwell_a_pause), 
+                dwell_time_b:(dwell_time_b-dwell_b_pause), 
+                views_a:views_a, 
+                views_b:views_b, 
+                width:width,
+                height:height,
+                device:device, 
+                study_step:step_label,
+                timestamp:Date.now()
+            }).then(function (response) {
+                //log(response);
+            }).catch(function (error) {
+                log(error);
+            });     
+        } catch (error) {
+            log(error)
+        }
+    }
+</script>
+</html>

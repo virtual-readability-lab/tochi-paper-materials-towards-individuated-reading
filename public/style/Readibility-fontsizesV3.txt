@@ -1,0 +1,68 @@
+Making xHeight similar for all other fonts with reference font.
+
+Reference Font: Times with Font Size: 16.0
+
+Font Name: SourceSansPro-Regular
+NewFontSize: 14.814816
+Font Name: ArialMT
+NewFontSize: 13.872832
+Font Name: Verdana
+NewFontSize: 13.211010
+Font Name: UtopiaStd-Regular
+NewFontSize: 15.618222
+Font Name: Roboto-Regular
+NewFontSize: 13.636364
+Font Name: Raleway-Regular
+NewFontSize: 13.819577
+Font Name: PoynterGothicText-Regular
+NewFontSize: 14.845362
+Font Name: Oswald-Regular
+NewFontSize: 12.456747
+Font Name: NotoSans-Regular
+NewFontSize: 13.432837
+Font Name: OpenSans
+NewFontSize: 13.457944
+Font Name: Montserrat-Regular
+NewFontSize: 13.688213
+Font Name: Lato-Regular
+NewFontSize: 14.201183
+Font Name: HelveticaNeueLTStd-Roman
+NewFontSize: 13.926499
+Font Name: Georgia
+NewFontSize: 14.968816
+Font Name: FranklinGothicURWCond-Medium
+NewFontSize: 14.604463
+Font Name: FranklinGothicURWCond-Book
+NewFontSize: 14.604463
+Font Name: EBGaramond-Regular
+NewFontSize: 17.777779
+Font Name: Calibri
+NewFontSize: 15.417559
+Font Name: ITCAvantGardePro-Bk
+NewFontSize: 13.162705
+Font Name: ComicSansMS
+NewFontSize: 13.333332
+Font Name: AvenirNext-HeavyItalic
+NewFontSize: 13.688213
+Font Name: AvenirNext-Heavy
+NewFontSize: 13.688213
+Font Name: AvenirNext-BoldItalic
+NewFontSize: 14.457830
+Font Name: AvenirNext-Bold
+NewFontSize: 14.457830
+Font Name: AvenirNext-DemiBoldItalic
+NewFontSize: 15.000000
+Font Name: AvenirNext-DemiBold
+NewFontSize: 15.000000
+Font Name: AvenirNext-MediumItalic
+NewFontSize: 15.189873
+Font Name: AvenirNext-Medium
+NewFontSize: 15.189873
+Font Name: AvenirNext-Italic
+NewFontSize: 15.384616
+Font Name: AvenirNext-Regular
+NewFontSize: 15.384616
+Font Name: AvenirNext-UltraLightItalic
+NewFontSize: 15.652174
+Font Name: AvenirNext-UltraLight
+NewFontSize: 15.652174

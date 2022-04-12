@@ -1,0 +1,81 @@
+p.system {
+    font-family: system !important;
+	font-weight: normal;
+	font-style:  normal;
+}
+p.arial {
+    font-family: 'Arial' !important;
+}
+p.avantgarde {
+    font-family: itc-avant-garde-gothic-pro,sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+p.calibri {
+    font-family: calibri, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+p.franklin_gothic {
+    font-family: franklin-gothic-condensed, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+p.garamond {
+    font-family: eb-garamond,serif;
+    font-weight: 400;
+    font-style: normal;
+}
+p.helvetica {
+    font-family: "Helvetica Neue", "HelveticaNeue-Light", "Helvetica Neue Light", Helvetica, sans-serif;
+}
+p.lato {
+    font-family: 'Lato', sans-serif !important;
+}
+p.montserrat {
+    font-family: 'Montserrat', sans-serif;
+}
+p.noto_sans {
+    font-family: 'Noto Sans', sans-serif;
+}
+p.open_sans {
+    font-family: 'Open Sans', sans-serif;
+}
+p.oswald {
+    font-family: oswald, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+p.poynter_gothic_text {
+    font-family: poynter-gothic-text, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+p.roboto {
+    font-family: 'Roboto' !important;
+}
+p.times {
+    font-family: 'Times' !important;
+}
+p.utopia {
+    font-family: utopia-std, serif;
+    font-weight: 400;
+    font-style: normal;
+}
+p.source_sans {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 16px;
+}
+p.comic_sans {
+    font-family: "Comic Sans MS", cursive, sans-serif;
+}
+p.georgia {
+    font-family: Georgia, serif;
+}
+p.raleway {
+    font-family: 'Raleway', sans-serif;
+}
+p.verdana {
+    font-family: Verdana, sans-serif;
+    font-weight: 300;
+}

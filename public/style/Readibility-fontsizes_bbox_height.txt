@@ -1,0 +1,50 @@
+Making BBOX HEIGHT similar for all other fonts with reference font.
+
+Reference Font: Times with Font Size: 16.0
+
+Font Name: Verdana
+NewFontSize: 14.417531
+Font Name: UtopiaStd-Regular
+NewFontSize: 15.886472
+Font Name: SourceSansPro-Regular
+NewFontSize: 15.797202
+Font Name: Roboto-Regular
+NewFontSize: 14.801447
+Font Name: Raleway-Regular
+NewFontSize: 15.012980
+Font Name: PoynterGothicText-Regular
+NewFontSize: 15.659735
+Font Name: Oswald-Regular
+NewFontSize: 13.342849
+Font Name: OpenSans
+NewFontSize: 14.516127
+Font Name: NotoSans-Regular
+NewFontSize: 14.507869
+Font Name: Montserrat-Regular
+NewFontSize: 15.018652
+Font Name: Lato-Regular
+NewFontSize: 14.910544
+Font Name: HelveticaNeueLTStd-Roman
+NewFontSize: 14.936339
+Font Name: Georgia
+NewFontSize: 15.033908
+Font Name: FranklinGothicURWCond-Medium
+NewFontSize: 15.860447
+Font Name: FranklinGothicURWCond-Book
+NewFontSize: 15.830130
+Font Name: EBGaramond-Regular
+NewFontSize: 15.853749
+Font Name: ComicSansMS
+NewFontSize: 13.698256
+Font Name: Calibri
+NewFontSize: 16.576466
+Font Name: AvenirNext-HeavyItalic
+NewFontSize: 14.673242
+Font Name: AvenirNext-Regular
+NewFontSize: 15.045914
+Font Name: AvenirNext-UltraLight
+NewFontSize: 15.059256
+Font Name: ITCAvantGardePro-Bk
+NewFontSize: 14.429299
+Font Name: ArialMT
+NewFontSize: 14.926044

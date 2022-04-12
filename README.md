@@ -23,4 +23,18 @@ JEFF HUANG, Brown University
 
 BEN D. SAWYER, Virtual Readability Lab, University of Central Florida
 
-# Coming Soon! :)
+# HOW TO RUN LOCALLY?
+
+```
+npm i
+nodemon app.js
+```
+
+# DATABASE
+
+This version of the code uses sqlite. When nodemon app.js is run it will automatically create the database and tables.
+The database is located in the /db folder.
+
+# FONTS
+
+The paper features Avenir Next. However, we cannot provide the source font due to licensing terms. Instead the code has been changed to use someone's system font instead.

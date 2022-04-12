@@ -1,0 +1,95 @@
+<!DOCTYPE html></div>
+<html lang="html">
+<head>
+    <meta charset="utf-8">
+    <!--<link rel="shortcut icon" href="favicon.ico">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Import Roboto, Lato, Open Sans, Monsterrat, Noto Sans  -->
+    <link href="https://fonts.googleapis.com/css?family=Lato|Montserrat|Noto+Sans|Open+Sans|Roboto&display=swap" rel="stylesheet">
+
+    <!-- Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+
+    <!-- Adobe Fonts: Avant Garde -->
+    <link rel="stylesheet" href="https://use.typekit.net/oly8jmk.css">
+
+    <!-- Other CSS -->
+    <!--<link rel="stylesheet" href="style/bulma-0.7.5/css/bulma.min.css"></link>-->
+    <link rel="stylesheet" href="style/readability.css"></link>
+    <link rel="stylesheet" href="style/font_choices.css"></link>
+    
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ua-parser-js@0.7.20/src/ua-parser.min.js"></script>
+</head>
+
+<body style="background: #fff; padding:4em;">
+    <div style="font-family: 'Noto Sans';">
+        <h2>Paste Words + Fonts: (word, font, size)</h2>
+        <h4>Fonts Available: arial, avantgarde, system, calibri, franklin_gothic, garamond, helvetica, lato, montserrat, noto_sans, open_sans, oswald, poynter_gothic_text, roboto, times, utopia</h4>
+        <textarea id="words" class="textarea" rows='25' cols='100' style='font-size: 14px' oninput="genWordCloud(this)" placeholder="paste text here (word,font \n word,font \n word,font,size) size is optional, default size is 24px"></textarea>
+    </div>
+    <div id='word_cloud'>
+
+    </div>
+</body>
+
+<script>
+
+let fonts = {
+        'times':{font:'Times',fact:', ‘is solid, formal, and simple. It is popular for newspapers, magazines, and corporate documents. Fashion brands that use this font include Gucci and Burberry.'}, 
+        'arial':{font:'Arial',fact:'is round and soft. It was a standard Microsoft font for a while and can be found everywhere, from signage to magazines, and UPS. Fashion brands that use this font include Tommy Hilfiger and Dior.'},
+        'calibri':{font:'Calibri',fact:'is warm, soft, and rounded. It is the default typeface of Microsoft Office and much other Microsoft software. This font was at the center of a political scandal in Pakistan in 2017!'},
+        'roboto':{font:'Roboto',fact:'has straight-sided capitals and distinctive racetrack-shaped rounded letters. It was developed by Google as the system font for Android.'},
+        'open_sans':{font:'Open Sans',fact:'is open and friendly. It is a popular modern web font used frequently by Google and on more than 20 million websites.'},
+        'lato':{font:'Lato',fact:'is described by its designer as “male and female, serious but friendly”. It is a popular web font used by over 12 thousand websites.'},
+        'avantgarde':{font:'Avant Garde',fact:'\’s design is inspired by geometric shapes, like near-perfect circles and squares. It is a font family based on the logo font used in the Avant Garde magazine. Also, the Netflix TV series, Master of None, famously used the font for its title cards.'},
+        'system':{font:'System Font',fact:'everyone has a system font on their computer. Imagine how much reading you do per day with your system font?'},
+        'montserrat':{font:'Montserrat',fact:'is geometric and elegant. It was inspired by the signage found in a historic neighborhood of Buenos Aires! Armani is a fashion brand that uses this font.'},
+        'noto_sans':{font:'Noto Sans',fact:'family of fonts were designed to be used across many languages for computers. All possible characters are present, so no missing letterboxes commonly referred to as \"tofu\" will be rendered. In fact, Noto is short for \"No mOre TOfu.\"'},
+        'poynter_gothic_text':{font:'Poynter Gothic Text',fact:'is classical, balanced, and light. It is a print font that is good for reading newspapers.'},
+        'helvetica':{font:'Helvetica',fact:'is dense, solid, and neutral. It is used for all the lettering on the New York subway signage and many U.S. government forms. A fashion brand that uses this font is American Apparel.'},
+        'garamond':{font:'Garamond',fact:'is classic, elegant, and has an old-style look. It is used in the Harry Potter and Dr. Seuss books, and by the fashion brand Abercrombie &amp; Fitch.'},
+        'oswald':{font:'Oswald',fact:'is informal, bold, and modern. It is a popular web font used for conferences, events, and portfolios.'},
+        'franklin_gothic':{font:'Franklin Gothic',fact:'is solid and important. It is considered a standard in the newspaper and advertising fields. It is the official typeface of the MOMA in New York City, and has been used for subtitles for “Star Wars”, and for logos for TNT, ESPN, and CBS Sports.'},
+        'utopia':{font:'Utopia',fact:', is solid, professional, classical. It is commonly used in advertising, newspaper, and book publishing.'}
+    }
+
+let fonts_joke = ['comic_sans','verdana','raleway','georgia']
+let fonts_joke_names = {'comic_sans':'Comic Sans','verdana':'Verdana','raleway':'Raleway','georgia':'Georgia'}
+
+window.onload = function() {
+    
+}
+
+/*
+word1_in_calibri,calibri
+word2_in_noto,noto_sans
+word3_in_garamond,garamond
+word4_in_times_48px,times,48
+*/
+function genWordCloud() {
+    data = document.getElementById('words').value
+    new_html = ''
+
+    data.split('\n').forEach(wordFont => {
+        word = wordFont.split(',')[0]
+        font = wordFont.split(',')[1]
+        font_size = 24
+        if(wordFont.split(',').length === 3) {
+            font_size = wordFont.split(',')[2]
+        }
+        log(wordFont.split(',').length)
+        new_html += `<p class="` + font + `" style="margin:24px; font-size:` + font_size + `px;">` + word + `</p>`
+    });
+
+    document.getElementById('word_cloud').innerHTML = new_html
+
+    log('\n\n')
+}
+
+function log(str) {
+    console.log(str)
+}
+</script>    

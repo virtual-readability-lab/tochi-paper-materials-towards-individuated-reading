@@ -1,0 +1,259 @@
+@font-face {
+    font-family: system;
+    font-style: normal;
+    font-weight: 300;
+    src: local(".SFNSText-Light"), local(".HelveticaNeueDeskInterface-Light"), local(".LucidaGrandeUI"), local("Ubuntu Light"), local("Segoe UI Light"), local("Roboto-Light"), local("DroidSans"), local("Tahoma");
+}
+
+@font-face {
+    font-family: 'Arial';
+    src: url('fonts/arial/arial-webfont.woff2') format('woff2'),
+         url('fonts/arial/arial-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'itc-avant-garde-gothic-pro';
+    font-style: normal;
+    font-weight: normal;
+    src: local('itc-avant-garde-gothic-pro'), url('fonts/avantgarde/ITCAvantGardePro-Bk.otf') format('truetype');
+}
+
+@font-face {
+    font-family: 'calibri';
+    font-style: normal;
+    font-weight: 400;
+    src: local('calibri'), url(https://fonts.gstatic.com/l/font?kit=J7afnpV-BGlaFfdAhLEY67FIEjg&skey=a1029226f80653a8&v=v10) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+  
+@font-face {
+    font-family: 'franklingothic_urw_condmedium';
+    src: url('fonts/franklin_gothic/franklin_gothic_medium-webfont.woff2') format('woff2'),
+         url('fonts/franklin_gothic/franklin_gothic_medium-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'eb_garamondregular';
+    src: url('fonts/garamond/garamond-webfont.woff2') format('woff2'),
+         url('fonts/garamon/garamond-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Helvetica Neue'), url('fonts/helvetica/HelveticaNeueLTStd-Roman.otf') format('otf');
+}
+@font-face {
+    font-family: 'latoregular';
+    src: url('fonts/lato/lato-webfont.woff2') format('woff2'),
+         url('fonts/lato/lato-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'montserratregular';
+    src: url('fonts/montserrat/montserrat-webfont.woff2') format('woff2'),
+         url('fonts/montserrat/montserrat-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'noto_sans';
+    src: url('fonts/noto_sans/noto_sans-webfont.woff2') format('woff2'),
+         url('fonts/noto_sans/noto_sans-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'open_sans';
+    src: url('fonts/open_sans/open_sans-webfont.woff2') format('woff2'),
+         url('fonts/open_sans/open_sans-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'oswald';
+    src: url('fonts/oswald/oswald-webfont.woff2') format('woff2'),
+         url('fonts/oswald/oswald-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'poynter-gothic-text';
+    font-style: normal;
+    font-weight: normal;
+    src: local('poynter-gothic-text'), url('fonts/poynter_gothic_text/poynter_gothic_text.otf') format('otf');
+}
+@font-face {
+    font-family: 'Roboto';
+    src: url('fonts/roboto/roboto-webfont.woff2') format('woff2'),
+         url('fonts/roboto/roboto-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'Times';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Times'), url('fonts/times/timr45w.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'utopia-std';
+    font-style: normal;
+    font-weight: normal;
+    src: local('utopia-std'), url('fonts/utopia/utopia.otf') format('otf');
+}
+@font-face {
+    font-family: 'source_sans_proregular';
+    src: url('fonts/source_sans_pro/sourcesanspro-regular-webfont.woff2') format('woff2'),
+         url('fonts/source_sans_pro/sourcesanspro-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+/*** FONTS normal font size - 16px ***/
+
+p.system {
+    font-family: system !important;
+	font-weight: normal;
+	font-style:  normal;
+    font-size: 16px;
+}
+p.arial {
+    font-family: 'Arial' !important;
+    font-size: 14.926044px;
+}
+p.avantgarde {
+    font-family: itc-avant-garde-gothic-pro,sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 14.29299px
+}
+p.calibri {
+    font-family: calibri, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+}
+p.franklin_gothic {
+    font-family: franklin-gothic-condensed, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+}
+p.garamond {
+    font-family: eb-garamond, serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16.418425px;
+}
+p.helvetica {
+    font-family: "Helvetica Neue", "HelveticaNeue-Light", "Helvetica Neue Light", Helvetica, sans-serif;
+    font-size: 14.936339px;
+}
+p.lato {
+    font-family: 'Lato', sans-serif !important;
+    font-size: 14.910544px;
+}
+p.montserrat {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13.688213px;
+}
+p.noto_sans {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 14.507869px;
+}
+p.open_sans {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14.516127px;
+}
+p.oswald {
+    font-family: oswald, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+}
+p.poynter_gothic_text {
+    font-family: poynter-gothic-text, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14.845362px;
+}
+p.roboto {
+    font-family: 'Roboto' !important;
+    font-size: 14.801447px;
+}
+p.times {
+    font-family: 'Times' !important;
+    font-size: 16px;
+}
+p.utopia {
+    font-family: utopia-std, serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 15.250897px;
+}
+p.source_sans {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 16px;
+}
+p.comic_sans {
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    font-size: 14.260329px;
+}
+p.georgia {
+    font-family: Georgia, serif;
+    font-size: 14.968816px;
+}
+p.raleway {
+    font-family: 'Raleway', sans-serif;
+    font-size: 15.01298px;
+}
+p.verdana {
+    font-family: Verdana, sans-serif;
+    font-weight: 300;
+    font-size: 14.018619px;
+}
+
+
+/*** Joke Fonts for Testing ***/
+@font-face {
+    font-family: 'Comic Sans MS';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Comic Sans MS'), url('fonts/comic_sans/comicsansms.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Georgia';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Georgia'), url('fonts/georgia/georgia.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'raleway';
+    src: url('fonts/raleway/raleway-webfont.woff2') format('woff2'),
+         url('fonts/raleway/raleway-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'Verdana';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Verdana'), url('fonts/verdana/verdana.ttf') format('truetype');
+}

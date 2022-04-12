@@ -1,0 +1,44 @@
+Making BBOX width similar for all other fonts with reference font.
+
+Reference Font: Times with Font Size: 16.0
+
+Font Name: SourceSansPro-Regular
+NewFontSize: 15.358518
+Font Name: Roboto-Regular
+NewFontSize: 14.517934
+Font Name: Raleway-Regular
+NewFontSize: 13.790581
+Font Name: PoynterGothicText-Regular
+NewFontSize: 14.532395
+Font Name: Oswald-Regular
+NewFontSize: 18.071501
+Font Name: OpenSans
+NewFontSize: 13.645309
+Font Name: NotoSans-Regular
+NewFontSize: 13.559188
+Font Name: Montserrat-Regular
+NewFontSize: 12.595167
+Font Name: Lato-Regular
+NewFontSize: 14.522510
+Font Name: HelveticaNeueLTStd-Roman
+NewFontSize: 14.438685
+Font Name: Georgia
+NewFontSize: 14.432298
+Font Name: FranklinGothicURWCond-Medium
+NewFontSize: 18.083652
+Font Name: EBGaramond-Regular
+NewFontSize: 16.418425
+Font Name: ComicSansMS
+NewFontSize: 14.260329
+Font Name: Calibri
+NewFontSize: 15.668705
+Font Name: AvenirNext-HeavyItalic
+NewFontSize: 12.626200
+Font Name: AvenirNext-Heavy
+NewFontSize: 12.498547
+Font Name: AvenirNext-Medium
+NewFontSize: 13.986039
+Font Name: ITCAvantGardePro-Bk
+NewFontSize: 13.096803
+Font Name: ArialMT
+NewFontSize: 14.546704
