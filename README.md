@@ -38,3 +38,12 @@ The database is located in the /db folder.
 # FONTS
 
 The paper features Avenir Next. However, we cannot provide the source font due to licensing terms. Instead the code has been changed to use someone's system font instead.
+
+# Reading Passages and Source
+
+The source files are located in:
+```
+passages_source/readability_reading_passages_TOCHI.zip
+```
+
+This source has been used within index.html for the readability test.
